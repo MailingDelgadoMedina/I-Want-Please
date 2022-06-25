@@ -1,4 +1,10 @@
 import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
+import two_kids_bw from "../public/static/two_kids_bw.jpg";
+
+const hero_image =
+  "https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=748&q=80";
 
 export default function Home() {
   const { theme, setTheme } = useTheme("dark");
@@ -8,12 +14,11 @@ export default function Home() {
         <div className="lg:items-center lg:justify-between lg:flex">
           <div className="flex items-center justify-between">
             <div>
-              <a
-                className="text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300"
-                href="#"
-              >
-                I Want Please
-              </a>
+              <Link href="/">
+                <a className="text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
+                  I Want Please
+                </a>
+              </Link>
             </div>
 
             {
@@ -36,12 +41,14 @@ export default function Home() {
             // Mobile Menu open: "block", Menu closed: "hidden"
           }
           <div className="flex flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:block">
-            <a
-              href="#"
-              className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
-            >
-              Home
-            </a>
+            <Link href="/">
+              <a
+                href="#"
+                className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                Home
+              </a>
+            </Link>
             <a
               href="#"
               className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
@@ -54,12 +61,11 @@ export default function Home() {
             >
               Contact
             </a>
-            <a
-              href="./login"
-              className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
-            >
-              Log In
-            </a>
+            <Link href="/login">
+              <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                Log In
+              </a>
+            </Link>
             <a
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="cursor-pointer px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
@@ -105,17 +111,7 @@ export default function Home() {
         </div>
 
         <div className="w-full h-64 lg:w-1/2 lg:h-auto">
-          <div
-            className="w-full h-full bg-cover"
-            style={{
-              backgroundImage:
-                "url(" +
-                "https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=748&q=80" +
-                ")",
-            }}
-          >
-            <div className="w-full h-full bg-black opacity-25"></div>
-          </div>
+          <Image alt="Two kids" src={two_kids_bw} layout="intrinsic"></Image>
         </div>
       </div>
     </header>
