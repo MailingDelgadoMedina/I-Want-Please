@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -142,42 +142,6 @@ Log In
       
 
       
-        <div className="flex items-center justify-center w-full px-6 py-8 lg:h-[32rem] lg:w-1/2">
-          <div className="max-w-xl">
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-white lg:text-3xl">
-              Help With Your New{" "}
-              <span className="text-blue-600 dark:text-blue-400">Idea</span>
-            </h2>
-
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 lg:text-base">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Blanditiis commodi cum cupiditate ducimus, fugit harum id
-              necessitatibus odio quam quasi, quibusdam rem tempora voluptates.
-            </p>
-</div>
-            <div className="flex flex-col mt-6 space-y-3 lg:space-y-0 lg:flex-row">
-              <a
-                href="#"
-                className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
-              >
-                Contact
-              </a>
-              <Link href="/login">
-                <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
-                  Log In
-                </a>
-              </Link>
-              <a
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="cursor-pointer px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
-              >
-                🌙/🌞
-                {
-                  // theme === "dark" ? "🌙" : "🌞"
-                }
-              </a>
-            </div>
-          </div>
         </nav>
 
         <div className="lg:flex">
