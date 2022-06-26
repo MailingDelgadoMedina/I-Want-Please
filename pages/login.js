@@ -1,8 +1,11 @@
 import { useRef, useState, useEffect } from "react";
 import {auth, provider} from "../firebase/config"
-import {signInWithRedirect, signOut}from 'firebase/auth';
+import {signInWithRedirect, createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,}from 'firebase/auth';
 import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 
 import Image from "next/image";
@@ -32,7 +35,54 @@ e.preventDefault();
       console.log(error.message);
     });
 };
+//Sign In
+const signIn = (e) => {
 
+  e.preventDefault();
+ 
+   console.log(emailRef.current.value);
+   console.log(passwordRef.current.value);
+   console.log(`Hello ${emailRef.current.value}`);
+
+   signInWithEmailAndPassword(
+     auth,
+     emailRef.current.value,
+     passwordRef.current.value
+   ).then((userCredential) => {
+      console.log(userCredential)
+  
+     })
+     .catch((error) => {
+       alert(error.message);
+     });
+ };
+
+ //Register
+ const register = (e) => {
+   e.preventDefault();
+   createUserWithEmailAndPassword(
+     auth,
+     emailRef.current.value,
+     passwordRef.current.value,
+     
+   ).then((userCredential) => {
+     console.log(userCredential)
+ //signed up and logged
+     }).catch((error) => {
+       //Unable to signed up
+       alert(error.message);
+     });
+ };
+
+
+  //Password Reset
+
+  const forgotPass = () => {
+    sendPasswordResetEmail(auth, emailRef.current.value);
+    alert(
+      `If there is an account associated with this email, we will send an email for reset to " ${emailRef.current.value}`
+    );
+  };
 
 
 
@@ -131,14 +181,20 @@ e.preventDefault();
         <div className="mt-4">
           <label
             className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
-            htmlFor="LoggingEmailAddress"
+            htmlFor="email"
           >
             Email Address
           </label>
           <input
-            id="LoggingEmailAddress"
+          id="email"
+          ref={emailRef}
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          
             className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
-            type="email"
+          
           />
         </div>
 
@@ -146,12 +202,14 @@ e.preventDefault();
           <div className="flex justify-between">
             <label
               className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200"
-              htmlFor="loggingPassword"
+              htmlFor="password"
             >
               Password
             </label>
+           
+
             <a
-              href="#"
+             onClick={forgotPass}
               className="text-xs text-gray-500 dark:text-gray-300 hover:underline"
             >
               Forget Password?
@@ -159,14 +217,20 @@ e.preventDefault();
           </div>
 
           <input
-            id="loggingPassword"
-            className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
+          
+            id="password"
+            ref={passwordRef}
+            name="password"
             type="password"
+            autoComplete="current-password"
+            required
+            className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300"
+        
           />
         </div>
 
         <div className="mt-8">
-          <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+          <button onClick={signIn} className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
             Login
           </button>
         </div>
@@ -174,17 +238,15 @@ e.preventDefault();
         <div className="flex items-center justify-between mt-4">
           <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
 
-          <a
-            href="#"
-            className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
-          >
-            or sign up
-          </a>
-
+         
           <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
 
    
         </div>
+
+        <button onClick={register} className="mt-4 w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+            Sign Up
+          </button>
         </form>
       </div>
 
