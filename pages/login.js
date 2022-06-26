@@ -1,58 +1,51 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {auth, provider} from "../firebase/config"
 import {signInWithRedirect, signOut}from 'firebase/auth';
-
+import { useRouter } from 'next/router'
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 import Image from "next/image";
 import Link from "next/link";
 
-import loginPicture from "../public/static/login_pencils.jpg";
+const loginPicture = "https://res.cloudinary.com/programandoconmei/image/upload/v1656224865/iWantImg/login_pencils_dfrpcs.jpg";
 
 const Login = () => {
  const [user,loading,error]= useAuthState(auth);
 const emailRef = useRef("");
 const passwordRef = useRef("");
 const [myMessage, setMessage] = useState("");
-
+const router = useRouter();
 
 
 //Google Login
-const googleProvider = () => {
-
+const googleProvider = (e) => {
+e.preventDefault();
 
   signInWithRedirect(auth, provider)
     .then((result) => {
       setMessage(result.displaName);
+      router.push('/iwant');
     })
     .catch((error) => {
       console.log(error.message);
     });
 };
 
-//log out
-const logOut = () =>{
-  signOut(auth).then(() =>{
-    // console.log("You Logged out!");
- setMessage('You logged Out!');
 
-  }).catch((error) =>{
-    console.log(error.message);
-  })
-}
+
 
 
 
   return (
-    <div className="flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
+    <div className="lg:mt-36 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl ">
       <div className="hidden lg:block lg:w-1/2">
         <Image
           alt="login"
           src={loginPicture}
           layout="intrinsic"
-          width={600}
-          height={600}
+          width={700}
+          height={860}
         />
       </div>
 
@@ -60,13 +53,7 @@ const logOut = () =>{
        
         <div>
        
-    {user?(
-       <p className="text-xl text-center text-gray-600 dark:text-gray-200">Hello {user?.displayName}</p>
-     
-      ):(
-        <p className="text-xl text-center text-gray-600 dark:text-gray-200">{myMessage}</p>
-        )}
-        
+   
         </div>
      
         <form>
@@ -110,7 +97,7 @@ const logOut = () =>{
 
 
 
-        <a
+        {/* <a
          onClick={logOut}
           className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
@@ -120,7 +107,7 @@ const logOut = () =>{
           <span className="w-5/6 px-4 py-3 font-bold text-center">
           Log Out
           </span>
-        </a>
+        </a> */}
 
         
 
