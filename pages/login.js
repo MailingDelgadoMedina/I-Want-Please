@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import { useRef, useState } from "react";
 import {auth, provider} from "../firebase/config"
 import {signInWithRedirect, signOut}from 'firebase/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+=======
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+import loginPicture from "../public/static/login_pencils.jpg";
+>>>>>>> ba0a788ff7ac7e1826c7b0b91a93a6c51d3f6572
 
 const Login = () => {
  const [user,loading,error]= useAuthState(auth);
@@ -41,15 +49,15 @@ const logOut = () =>{
 
   return (
     <div className="flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
-      <div
-        className="hidden bg-cover lg:block lg:w-1/2"
-        style={{
-          backgroundImage:
-            "url(" +
-            "https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80" +
-            ")",
-        }}
-      ></div>
+      <div className="hidden lg:block lg:w-1/2">
+        <Image
+          alt="login"
+          src={loginPicture}
+          layout="intrinsic"
+          width={600}
+          height={600}
+        />
+      </div>
 
       <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
         <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white">
@@ -67,6 +75,11 @@ const logOut = () =>{
         </div>
      
         <form>
+        <Link href="/">
+          <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white cursor-pointer">
+            I want please!
+          </h2>
+        </Link>
 
 
     
