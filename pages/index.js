@@ -9,7 +9,8 @@ import { useState } from "react";
 import {auth} from "../firebase/config"
 import {signOut} from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import Footer from "../components/Footer";
 
 const twoKids = "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
 
@@ -244,7 +245,7 @@ Log In
     </div>
 </div>
 </section>
-
+<Footer/>
 
     </div>
   );

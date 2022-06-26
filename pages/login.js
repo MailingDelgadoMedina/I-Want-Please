@@ -7,6 +7,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 import Image from "next/image";
 import Link from "next/link";
+import Footer from "../components/Footer";
 
 const loginPicture = "https://res.cloudinary.com/programandoconmei/image/upload/v1656224865/iWantImg/login_pencils_dfrpcs.jpg";
 
@@ -38,6 +39,9 @@ e.preventDefault();
 
 
   return (
+
+    <>
+
     <div className="lg:mt-36 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl ">
       <div className="hidden lg:block lg:w-1/2">
         <Image
@@ -183,7 +187,11 @@ e.preventDefault();
         </div>
         </form>
       </div>
+
+
     </div>
+    <Footer/>
+    </>
   );
 };
 
