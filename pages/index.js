@@ -15,7 +15,7 @@ export default function Home() {
       <Head>
         <title>Everyhing you wish for</title>
         <meta name="description" content="Will serve you" />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <header className="bg-white dark:bg-gray-800">
         <nav className="px-6 py-4 shadow">
