@@ -4,18 +4,20 @@ import Link from "next/link";
 import Head from "next/head";
 
 import two_kids_bw from "../public/static/two_kids_bw.jpg";
+import { useState } from "react";
 
 const hero_image =
   "https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=748&q=80";
 
 export default function Home() {
+  const [menu, setMenu] = useState(false);
   const { theme, setTheme } = useTheme("dark");
   return (
     <div>
       <Head>
         <title>Everyhing you wish for</title>
         <meta name="description" content="Will serve you" />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <header className="bg-white dark:bg-gray-800">
         <nav className="px-6 py-4 shadow">
@@ -34,6 +36,7 @@ export default function Home() {
               }
               <div className="lg:hidden">
                 <button
+                  onClick={() => setMenu(!menu)}
                   type="button"
                   className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
                   aria-label="Toggle menu"
@@ -48,7 +51,11 @@ export default function Home() {
             {
               // Mobile Menu open: "block", Menu closed: "hidden"
             }
-            <div className="flex flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:block">
+            <div
+              className={`flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row ${
+                menu ? "flex" : "hidden lg:flex"
+              }`}
+            >
               <Link href="/">
                 <a
                   href="#"
