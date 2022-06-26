@@ -1,8 +1,43 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import {auth, provider} from "../firebase/config"
+import {signInWithRedirect, signOut}from 'firebase/auth';
+
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+ const [user,loading,error]= useAuthState(auth);
+const emailRef = useRef("");
+const passwordRef = useRef("");
+const [myMessage, setMessage] = useState("");
+
+
+
+//Google Login
+const googleProvider = () => {
+
+
+  signInWithRedirect(auth, provider)
+    .then((result) => {
+      setMessage(result.displaName);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+};
+
+//log out
+const logOut = () =>{
+  signOut(auth).then(() =>{
+    // console.log("You Logged out!");
+ setMessage('You logged Out!');
+
+  }).catch((error) =>{
+    console.log(error.message);
+  })
+}
+
+
 
   return (
     <div className="flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
@@ -20,13 +55,23 @@ const Login = () => {
         <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white">
           I want please!
         </h2>
+        <div>
+       
+    {user?(
+       <p className="text-xl text-center text-gray-600 dark:text-gray-200">Hello {user?.displayName}</p>
+     
+      ):(
+        <p className="text-xl text-center text-gray-600 dark:text-gray-200">{myMessage}</p>
+        )}
+        
+        </div>
+     
+        <form>
 
-        <p className="text-xl text-center text-gray-600 dark:text-gray-200">
-          Welcome back!
-        </p>
 
+    
         <a
-          href="#"
+        onClick={googleProvider}
           className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
           <div className="px-4 py-2">
@@ -54,6 +99,22 @@ const Login = () => {
             Sign in with Google
           </span>
         </a>
+
+
+
+        <a
+         onClick={logOut}
+          className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+        >
+          
+         
+
+          <span className="w-5/6 px-4 py-3 font-bold text-center">
+          Log Out
+          </span>
+        </a>
+
+        
 
         <div className="flex items-center justify-between mt-4">
           <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
@@ -122,7 +183,10 @@ const Login = () => {
           </a>
 
           <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+
+   
         </div>
+        </form>
       </div>
     </div>
   );
