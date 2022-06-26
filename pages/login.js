@@ -1,17 +1,14 @@
-<<<<<<< HEAD
 import { useRef, useState } from "react";
 import {auth, provider} from "../firebase/config"
 import {signInWithRedirect, signOut}from 'firebase/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-=======
-import { useState } from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 
 import loginPicture from "../public/static/login_pencils.jpg";
->>>>>>> ba0a788ff7ac7e1826c7b0b91a93a6c51d3f6572
 
 const Login = () => {
  const [user,loading,error]= useAuthState(auth);
@@ -60,9 +57,7 @@ const logOut = () =>{
       </div>
 
       <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
-        <h2 className="text-2xl font-semibold text-center text-gray-700 dark:text-white">
-          I want please!
-        </h2>
+       
         <div>
        
     {user?(
