@@ -4,7 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 
+import { auth } from "../firebase/config";
+import { signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/router";
 
+<<<<<<< HEAD
 import { useState } from "react";
 import {auth} from "../firebase/config"
 import {signOut} from "firebase/auth";
@@ -15,6 +20,10 @@ import Footer from "../components/Footer";
 const twoKids = "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
 
 
+=======
+const twoKids =
+  "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
+>>>>>>> e7eb46408a90d86df4ea6e981bf83c50559103fe
 
 const hero_image =
   "https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=748&q=80";
@@ -22,7 +31,7 @@ const hero_image =
 export default function Home() {
   const [menu, setMenu] = useState(false);
   const { theme, setTheme } = useTheme("dark");
-  const [user,loading,error]= useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
   //const [myMessage, setMessage] = useState("");
 
@@ -31,12 +40,12 @@ export default function Home() {
   //   signOut(auth).then(() =>{
   //     // console.log("You Logged out!");
   //  setMessage('You logged Out!');
-  
+
   //   }).catch((error) =>{
   //     console.log(error.message);
   //   })
   // }
-  
+
   return (
     <div>
       <Head>
@@ -71,7 +80,7 @@ export default function Home() {
                   </svg>
                 </button>
               </div>
-    {/* <div className="bg-white dark:bg-gray-800">
+              {/* <div className="bg-white dark:bg-gray-800">
       <div className="px-6 py-4 shadow">
         <div className="lg:items-center lg:justify-between lg:flex">
           <div className="flex items-center justify-between">
@@ -91,20 +100,27 @@ export default function Home() {
                 menu ? "flex" : "hidden lg:flex"
               }`}
             >
+<<<<<<< HEAD
            
                 <a
                   href="/"
                   className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
                 >
+=======
+              <Link href="/">
+                <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+>>>>>>> e7eb46408a90d86df4ea6e981bf83c50559103fe
                   Home
                 </a>
-             
+              </Link>
+
               <a
                 href="/iwant"
                 className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
               >
                 I want
               </a>
+<<<<<<< HEAD
       
            
             <a
@@ -138,6 +154,91 @@ Log In
       
 
       
+=======
+
+              <a
+                href="#"
+                className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                About
+              </a>
+              <a
+                href="#"
+                className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                Contact
+              </a>
+              {user ? (
+                <a
+                  onClick={() =>
+                    signOut(auth, () => {
+                      router.push("/");
+                      console.log("Logged out");
+                    })
+                  }
+                  className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+                >
+                  Log Out
+                </a>
+              ) : (
+                <a
+                  href="/login"
+                  className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+                >
+                  Log In
+                </a>
+              )}
+
+              <a
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className=" lg:mr-12 cursor-pointer px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                🌙/🌞
+                {
+                  // theme === "dark" ? "🌙" : "🌞"
+                }
+              </a>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-center w-full px-6 py-8 lg:h-[32rem] lg:w-1/2">
+            <div className="max-w-xl">
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white lg:text-3xl">
+                Help With Your New{" "}
+                <span className="text-blue-600 dark:text-blue-400">Idea</span>
+              </h2>
+
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400 lg:text-base">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Blanditiis commodi cum cupiditate ducimus, fugit harum id
+                necessitatibus odio quam quasi, quibusdam rem tempora
+                voluptates.
+              </p>
+            </div>
+            <div className="flex flex-col mt-6 space-y-3 lg:space-y-0 lg:flex-row">
+              <a
+                href="#"
+                className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                Contact
+              </a>
+              <Link href="/login">
+                <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                  Log In
+                </a>
+              </Link>
+              <a
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="cursor-pointer px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                🌙/🌞
+                {
+                  // theme === "dark" ? "🌙" : "🌞"
+                }
+              </a>
+            </div>
+          </div>
+>>>>>>> e7eb46408a90d86df4ea6e981bf83c50559103fe
         </nav>
 
         <div className="lg:flex">
@@ -170,13 +271,18 @@ Log In
                 </a>
               </div>
             </div>
-     </div>
+          </div>
 
-        
-        <div className="w-full h-64 lg:w-1/2 lg:h-auto">
-          <Image alt="Two kids" src={twoKids} layout="intrinsic" width={712} height={524}></Image>
+          <div className="w-full h-64 lg:w-1/2 lg:h-auto">
+            <Image
+              alt="Two kids"
+              src={twoKids}
+              layout="intrinsic"
+              width={712}
+              height={524}
+            ></Image>
+          </div>
         </div>
-      </div>
       </header>
 
 
@@ -249,7 +355,9 @@ Log In
 
     </div>
   );
-
 }
+<<<<<<< HEAD
 
    
+=======
+>>>>>>> e7eb46408a90d86df4ea6e981bf83c50559103fe
