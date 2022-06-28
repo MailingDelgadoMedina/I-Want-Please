@@ -99,15 +99,18 @@ export default function Home() {
                   Home
                 </a>
               </Link>
-
+              <Link   href="/iwant" >
               <a
-                href="/iwant"
+              
                 className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
               >
                 I want
               </a>
       
            
+              
+              </Link>
+          
             <a
               href="#"
               className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
