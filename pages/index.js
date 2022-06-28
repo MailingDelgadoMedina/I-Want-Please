@@ -25,6 +25,8 @@ export default function Home() {
   const { theme, setTheme } = useTheme("dark");
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
+
+  //test
   //const [myMessage, setMessage] = useState("");
 
   //Logout
