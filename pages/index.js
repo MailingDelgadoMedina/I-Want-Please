@@ -5,6 +5,7 @@ import Link from "next/link";
 import Head from "next/head";
 
 
+
 import { useState } from "react";
 import {auth} from "../firebase/config"
 import {signOut} from "firebase/auth";
@@ -22,7 +23,7 @@ const hero_image =
 export default function Home() {
   const [menu, setMenu] = useState(false);
   const { theme, setTheme } = useTheme("dark");
-  const [user,loading,error]= useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
   //const [myMessage, setMessage] = useState("");
 
@@ -31,12 +32,12 @@ export default function Home() {
   //   signOut(auth).then(() =>{
   //     // console.log("You Logged out!");
   //  setMessage('You logged Out!');
-  
+
   //   }).catch((error) =>{
   //     console.log(error.message);
   //   })
   // }
-  
+
   return (
     <div>
       <Head>
@@ -71,10 +72,10 @@ export default function Home() {
                   </svg>
                 </button>
               </div>
-    {/* <div classNameName="bg-white dark:bg-gray-800">
-      <div classNameName="px-6 py-4 shadow">
-        <div classNameName="lg:items-center lg:justify-between lg:flex">
-          <div classNameName="flex items-center justify-between">
+              {/* <div className="bg-white dark:bg-gray-800">
+      <div className="px-6 py-4 shadow">
+        <div className="lg:items-center lg:justify-between lg:flex">
+          <div className="flex items-center justify-between">
             <div>
               <Link href="/">
                 <a classNameName="lg:mx-12 text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
@@ -91,14 +92,12 @@ export default function Home() {
                 menu ? "flex" : "hidden lg:flex"
               }`}
             >
-           
-                <a
-                  href="/"
-                  classNameName="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
-                >
+              <Link href="/">
+                <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
                   Home
                 </a>
-             
+              </Link>
+
               <a
                 href="/iwant"
                 classNameName="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
@@ -170,13 +169,18 @@ Log In
                 </a>
               </div>
             </div>
-     </div>
+          </div>
 
-        
-        <div classNameName="w-full h-64 lg:w-1/2 lg:h-auto">
-          <Image alt="Two kids" src={twoKids} layout="intrinsic" width={712} height={524}></Image>
+          <div className="w-full h-64 lg:w-1/2 lg:h-auto">
+            <Image
+              alt="Two kids"
+              src={twoKids}
+              layout="intrinsic"
+              width={712}
+              height={524}
+            ></Image>
+          </div>
         </div>
-      </div>
       </header>
 
 
@@ -249,7 +253,6 @@ Log In
 
     </div>
   );
-
 }
 
    
