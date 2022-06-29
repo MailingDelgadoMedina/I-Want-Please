@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 import { fetchFastFoodStores } from "../foursquare/foursquare";
+import Image from "next/image";
+import fastFoodGenericPicture from "../public/static/fastfood.jpg";
 
-const Card = ({ name, address, photosNumber }) => {
+const Card = ({ name, address, photos }) => {
   return (
-    <div className="flex flex-col m-2 h-48 w-64 bg-slate-500 justify-between">
+    <div className="flex flex-col m-2 h-48 w-64 bg-slate-700 justify-between border-2 border-black shadow-sm shadow-yellow-400/50 hover:scale-105 transition-all duration-300">
+      <Image
+        src={photos.length > 0 ? photos[0] : fastFoodGenericPicture}
+        alt={`Photo of ${name}`}
+        width={64}
+        height={64}
+        sizes="50vw"
+        className="object-cover"
+      />
+
       <h1 className="mt-2 text-center ">{name}</h1>
-      <h3 className="text-center">No of photos: {photosNumber}</h3>
       <p className="text-center mb-2">
         Address: <span>{address}</span>
       </p>
@@ -15,6 +25,21 @@ const Card = ({ name, address, photosNumber }) => {
 
 const Testfs = () => {
   const [stores, setStores] = useState([]);
+  const [latLong, setLatLong] = useState("44.4071008,26.1530244");
+
+  //get location data from browser
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log(
+        "latLong is :" +
+          position.coords.latitude +
+          "," +
+          position.coords.longitude
+      );
+      setLatLong(`${position.coords.latitude},${position.coords.longitude}`);
+      console.log({ latLong });
+    });
+  });
 
   useEffect(() => {
     const onceAtStartupFetchFastFoodStores = async () => {
@@ -38,7 +63,7 @@ const Testfs = () => {
             key={idx}
             name={store.name}
             address={store.location.address}
-            photosNumber={store.photos.length}
+            photos={store.photos}
           />
         );
       })}
