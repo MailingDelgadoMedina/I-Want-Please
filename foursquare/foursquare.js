@@ -1,14 +1,16 @@
-//URL query for getting the stores near a location
+import { useState } from "react";
+
+//URL for getting the stores near a location
 const getUrlForFastFoodStores = (latLong, query, limit) => {
   return `https://api.foursquare.com/v3/places/nearby?ll=${latLong}&query=${query}&v=20220203&limit=${limit}`;
 };
 
-//URL query for getting the photos of a specific location
+//URL for getting the photos of a specific location
 const getUrlForFastFoodPhoto = (fsq_id = "4cf53d2b99c6236ab7054a67") => {
   return `https://api.foursquare.com/v3/places/${fsq_id}/photos`;
 };
 
-//Query for getting the stores near a location
+//Query for getting the stores near a location and for every store make another query for photos.
 const fetchFastFoodStores = async (
   latLong = "43.65267326999575,-79.39545615725015",
   limit = "6"
@@ -23,16 +25,19 @@ const fetchFastFoodStores = async (
       }
     );
 
-    const data = await response.json();
+    const data = await response.json(); //fetched stores withouth photos
 
-    return data.results;
-    //   data.results?.map((venue, idx) => {
-    //     return {
-    //       ...venue,
-    //       //   imgUrl:
-    //       //     imageLink.prefix + "100x100" + imageLink.sufix,
-    //     };
-    //   })
+    const allDataFetched = [];
+    const promises = data.results.map(async (store, idx) => {
+      const storePhoto = await fetchFastFoodPhoto(store.fsq_id);
+      return { ...store, photos: storePhoto };
+    });
+    const storesWithPhotos = Promise.all(promises).then((results) => {
+      allDataFetched = results;
+      return allDataFetched;
+    });
+
+    return storesWithPhotos; //fetched stores with photos
   } catch (error) {
     if (!process.env.NEXT_PUBLIC_FOURSQUARE_API_KEY) {
       console.error("Can't get access to api key");
@@ -52,13 +57,13 @@ const fetchFastFoodPhoto = async (fsq_id = "4cf53d2b99c6236ab7054a67") => {
     });
 
     const data = await response.json();
-    console.log("FETCH PHOTO - data", data);
+    // console.log("FETCH PHOTO - data", data);
 
     if (data.length > 0) {
       const arrayOfPhotos = data.map((photo, idx) => {
         return photo.prefix + "original" + photo.suffix;
       });
-      console.log("FETCH PHOTO - arrayOfPhotos", arrayOfPhotos);
+
       return arrayOfPhotos;
     } else {
       return [];
@@ -72,4 +77,4 @@ const fetchFastFoodPhoto = async (fsq_id = "4cf53d2b99c6236ab7054a67") => {
   }
 };
 
-export { getUrlForFastFoodPhoto, fetchFastFoodStores, fetchFastFoodPhoto };
+export { fetchFastFoodStores, fetchFastFoodPhoto };
