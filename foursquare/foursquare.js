@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 //URL for getting the stores near a location
 const getUrlForFastFoodStores = (latLong, query, limit) => {
   return `https://api.foursquare.com/v3/places/nearby?ll=${latLong}&query=${query}&v=20220203&limit=${limit}`;
@@ -56,11 +54,10 @@ const fetchFastFoodPhoto = async (fsq_id = "4cf53d2b99c6236ab7054a67") => {
       },
     });
 
-    const data = await response.json();
-    // console.log("FETCH PHOTO - data", data);
+    const data = await response.json(); //fetched photos
 
     if (data.length > 0) {
-      const arrayOfPhotos = data.map((photo, idx) => {
+      const arrayOfPhotos = data.map((photo) => {
         return photo.prefix + "original" + photo.suffix;
       });
 
