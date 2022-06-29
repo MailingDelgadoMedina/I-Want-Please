@@ -25,10 +25,15 @@ const Card = ({ name, address, photos }) => {
 
 const Testfs = () => {
   const [stores, setStores] = useState([]);
-  const [latLong, setLatLong] = useState("44.4071008,26.1530244");
+  const [latLong, setLatLong] = useState(
+    "30.317341711033016,-81.65736726333698"
+  );
+  const [nearby, setNearby] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //get location data from browser
-  useEffect(() => {
+  const getLocation = () => {
+    setNearby(true);
     navigator.geolocation.getCurrentPosition(function (position) {
       console.log(
         "latLong is :" +
@@ -39,16 +44,25 @@ const Testfs = () => {
       setLatLong(`${position.coords.latitude},${position.coords.longitude}`);
       console.log({ latLong });
     });
-  });
+  };
+
+  // const nearbyFetchFastFoodStores = async () => {
+  //   const stores = await fetchFastFoodStores(latLong, "10");
+  //   setStores(stores);
+  // };
 
   useEffect(() => {
+    //This should be moved to getStaticProps
+
     const onceAtStartupFetchFastFoodStores = async () => {
-      const stores = await fetchFastFoodStores();
+      setLoading(true);
+      const stores = await fetchFastFoodStores(latLong, "5");
       setStores(stores);
+      setLoading(false);
     };
 
     onceAtStartupFetchFastFoodStores();
-  }, []);
+  }, [latLong]);
 
   useEffect(() => {
     console.log({ stores });
@@ -56,7 +70,18 @@ const Testfs = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-center mt-10">Fetched FastFoods</h1>
+      <h1 className="text-center mt-10 text-2xl">
+        {loading ? "Loading..." : "I Want Please"}
+      </h1>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4"
+        onClick={getLocation}
+      >
+        View FastFoods nearby
+      </button>
+      <h2 className="text-xl text-center">{`${
+        nearby ? "Nearby" : "Jacksonville"
+      } FastFood Stores`}</h2>
       {stores.map((store, idx) => {
         return (
           <Card
