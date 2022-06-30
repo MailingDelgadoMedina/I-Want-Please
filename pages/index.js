@@ -9,6 +9,7 @@ import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import Footer from "../components/Footer";
+import logo from "../public/static/Logo_I_Want_Please.svg";
 
 const twoKids =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
@@ -45,11 +46,18 @@ export default function Home() {
       </Head>
       <header className="bg-white dark:bg-gray-800">
         <nav className="px-6 py-4 shadow">
-          <div className="lg:items-center lg:justify-between lg:flex">
-            <div className="flex items-center justify-between">
-              <div>
+          <div className="lg:flex flex-row p-8 lg:justify-between">
+            <div className="flex items-center justify-between w-full">
+              <div className="flex justify-center content-center">
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={56}
+                  height={56}
+                  className="hover:scale-105 transition-all duration-200"
+                />
                 <Link href="/">
-                  <a className="lg:mx-12 text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
+                  <a className="place-self-center  mx-4 text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
                     I Want Please
                   </a>
                 </Link>
@@ -58,7 +66,7 @@ export default function Home() {
               {
                 //<!-- Mobile menu button -->
               }
-              <div className="lg:hidden">
+              <div className="lg:hidden bg-slate-600">
                 <button
                   onClick={() => setMenu(!menu)}
                   type="button"
@@ -86,8 +94,8 @@ export default function Home() {
               // Mobile Menu open: "block", Menu closed: "hidden"
             }
             <div
-              className={`flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row ${
-                menu ? "flex" : "hidden lg:flex"
+              className={`flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:w-full lg:justify-end lg:items-center ${
+                menu ? "flex text-right" : "hidden lg:flex"
               }`}
             >
               <Link href="/">
