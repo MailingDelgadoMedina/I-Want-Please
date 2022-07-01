@@ -174,6 +174,7 @@ export default function Home() {
 
           <div className="block p-4 w-full h-auto m-auto lg:w-1/2 lg:h-auto">
             <Image
+              className="rounded-md"
               alt="Two kids"
               src={twoKids}
               layout="responsive"
