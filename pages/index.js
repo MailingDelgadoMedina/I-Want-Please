@@ -38,15 +38,15 @@ export default function Home() {
   // }
 
   return (
-    <div>
+    <div className="">
       <Head>
         <title>Everyhing you wish for</title>
         <meta name="description" content="Will serve you" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header className="bg-white dark:bg-gray-800">
+      <header className="flex flex-col bg-white dark:bg-gray-800">
         <nav className="px-6 py-4 shadow">
-          <div className="lg:flex flex-row p-8 lg:justify-between">
+          <div className="relative lg:flex flex-row p-8 lg:justify-between">
             <div className="flex items-center justify-between w-full">
               <div className="flex justify-center content-center">
                 <Image
@@ -66,52 +66,44 @@ export default function Home() {
               {
                 //<!-- Mobile menu button -->
               }
-              <div className="lg:hidden bg-slate-600">
+              <div className="lg:hidden bg-white dark:bg-slate-700">
                 <button
                   onClick={() => setMenu(!menu)}
                   type="button"
-                  className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                  className=" text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
                   aria-label="Toggle menu"
                 >
-                  <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+                  <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current m-2">
                     <path d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
                   </svg>
                 </button>
               </div>
-              {/* <div className="bg-white dark:bg-gray-800">
-      <div className="px-6 py-4 shadow">
-        <div className="lg:items-center lg:justify-between lg:flex">
-          <div className="flex items-center justify-between">
-            <div>
-              <Link href="/">
-                <a className="lg:mx-12 text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
-                  I Want Please
-                </a>
-              </Link> */}
             </div>
 
             {
               // Mobile Menu open: "block", Menu closed: "hidden"
             }
             <div
-              className={`flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:w-full lg:justify-end lg:items-center ${
-                menu ? "flex text-right" : "hidden lg:flex"
+              className={`rounded flex flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:w-full lg:justify-end lg:items-center bg-gray-200/90 dark:bg-slate-700/90  lg:shadow-none lg:bg-transparent lg:dark:bg-transparent ${
+                menu
+                  ? "text-right absolute right-8 z-10 shadow-lg"
+                  : "hidden lg:flex"
               }`}
             >
               <Link href="/">
-                <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                <a className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
                   Home
                 </a>
               </Link>
               <Link href="/iwant">
-                <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                <a className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
                   I want
                 </a>
               </Link>
 
               <a
                 href="#"
-                className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+                className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
               >
                 Contact
               </a>
@@ -123,13 +115,13 @@ export default function Home() {
                       console.log("Logged out");
                     })
                   }
-                  className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+                  className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
                 >
                   Log Out
                 </a>
               ) : (
                 <Link href="/login">
-                  <a className="px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                  <a className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
                     Log In
                   </a>
                 </Link>
@@ -137,7 +129,7 @@ export default function Home() {
 
               <a
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className=" lg:mr-12 cursor-pointer px-2 py-2 text-sm text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+                className=" lg:mr-12 cursor-pointer px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
               >
                 🌙/🌞
                 {
@@ -180,11 +172,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-full h-64 lg:w-1/2 lg:h-auto">
+          <div className="block p-4 w-full h-auto m-auto lg:w-1/2 lg:h-auto">
             <Image
               alt="Two kids"
               src={twoKids}
-              layout="intrinsic"
+              layout="responsive"
               width={712}
               height={524}
             ></Image>
