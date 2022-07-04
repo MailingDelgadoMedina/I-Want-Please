@@ -123,28 +123,15 @@ const Testfs = () => {
   const clickToOpenModal = (store) => {
     setSelectedStore(store);
     setModal(true);
-    console.log("clickToOpenModal store is: ", store);
   };
 
   //get location data from browser
   const getLocation = () => {
     setNearby(true);
     navigator.geolocation.getCurrentPosition(function (position) {
-      console.log(
-        "latLong is :" +
-          position.coords.latitude +
-          "," +
-          position.coords.longitude
-      );
       setLatLong(`${position.coords.latitude},${position.coords.longitude}`);
-      console.log({ latLong });
     });
   };
-
-  // const nearbyFetchFastFoodStores = async () => {
-  //   const stores = await fetchFastFoodStores(latLong, "10");
-  //   setStores(stores);
-  // };
 
   useEffect(() => {
     //This should be moved to getStaticProps
@@ -159,33 +146,65 @@ const Testfs = () => {
     onceAtStartupFetchFastFoodStores();
   }, [latLong]);
 
-  useEffect(() => {
-    console.log({ stores });
-  }, [stores]);
-
-  useEffect(() => {
-    console.log({ modal });
-  }),
-    [modal];
+  // useEffect(() => {
+  //   console.log({ stores });
+  // }, [stores]);
 
   return (
     <div className="relative flex flex-col items-center">
-      {true && (
-        // selectedStore.length > 0 && modal &&
-        <div className="bg-red-500/70 fixed top-0 right-0 left-0 z-50 w-full flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden md:inset-0 h-modal md:h-full">
-          <Swiper
-            modules={[Navigation]}
-            spaceBetween={50}
-            slidesPerView={3}
-            navigation
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
-          >
-            <SwiperSlide>Slide 1</SwiperSlide>
-            <SwiperSlide>Slide 2</SwiperSlide>
-            <SwiperSlide>Slide 3</SwiperSlide>
-            <SwiperSlide>Slide 4</SwiperSlide>
-          </Swiper>
+      {modal && (
+        <div
+          onClick={(e) => {
+            if (e.target.className.includes("modal")) {
+              setModal(false);
+            }
+          }}
+          className="modal bg-slate-700/90 fixed top-0 right-0 left-0 z-50 w-full flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden md:inset-0 h-modal md:h-full"
+        >
+          {
+            <div className="bg-yellow-300 w-96 h-72 flex justify-center items-center">
+              {selectedStore.photos.length > 0 ? (
+                <Swiper
+                  className="bg-gray-500 h-full w-full"
+                  modules={[Navigation]}
+                  spaceBetween={50}
+                  slidesPerView={1}
+                  navigation
+                >
+                  {selectedStore.photos.map((photo, idx) => (
+                    <SwiperSlide key={idx}>
+                      <Image
+                        priority
+                        alt="fast-food store"
+                        src={photo}
+                        layout="responsive"
+                        width={400}
+                        height={400}
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <Swiper
+                  className="bg-gray-500 h-full w-full"
+                  modules={[Navigation]}
+                  spaceBetween={50}
+                  slidesPerView={1}
+                  navigation
+                >
+                  <SwiperSlide>
+                    <Image
+                      alt="fast-food store"
+                      src={fastFoodGenericPicture}
+                      layout="responsive"
+                      width={400}
+                      height={400}
+                    />
+                  </SwiperSlide>
+                </Swiper>
+              )}
+            </div>
+          }
 
           <h1 className="text-3xl underline underline-offset-8 pb-4">
             {selectedStore.name}
