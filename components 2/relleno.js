@@ -8,8 +8,6 @@ export default function relleno() {
 
 
 
-
-
     </div>
   )
 }
