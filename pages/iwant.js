@@ -19,25 +19,24 @@ speak({text:text})
 
 <Navbar/>
 
+<section className="bg-white dark:bg-gray-800">
+        <div className="container px-6 py-8 mx-auto">
+            <div className="items-center lg:flex">
+                <div className="lg:w-1/2">
+                    <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">I want Please</h2>
 
-    <section class="bg-white dark:bg-gray-800">
-        <div class="container px-6 py-8 mx-auto">
-            <div class="items-center lg:flex">
-                <div class="lg:w-1/2">
-                    <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">I want Please</h2>
-
-                    <p class="mt-4 text-gray-500 dark:text-gray-400 lg:max-w-md">
+                    <p className="mt-4 text-gray-500 dark:text-gray-400 lg:max-w-md">
                         Hello there, 👋 welcome to this wonderful space to speak by typing. This service is free and made with love for the non-verbal community.
                     </p>
 
               
                 </div>
 
-                <div class="mt-8 lg:mt-0 lg:w-1/2">
-                    <div class="flex items-center justify-center lg:justify-end">
-                        <div class="max-w-lg">
+                <div className="mt-8 lg:mt-0 lg:w-1/2">
+                    <div className="flex items-center justify-center lg:justify-end">
+                        <div className="max-w-lg">
 
-                            <Image class="object-cover object-center w-full h-64 rounded-md shadow" src={messageImg} 
+                            <Image className="object-cover object-center w-full h-64 rounded-md shadow" src={messageImg} 
                             alt=""
                             layout="intrinsic"
               width={712}
