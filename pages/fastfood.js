@@ -39,6 +39,11 @@ import {
   ViewListIcon,
 } from '@heroicons/react/solid'
 
+
+
+const girl = "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80";
+const imgF = "https://tailwindui.com/img/logos/workflow-mark.svg?color=white";
+
 const navigation = [
   { name: 'Home', href: '#', icon: HomeIcon, current: false },
   { name: 'All Files', href: '#', icon: ViewGridIconOutline, current: false },
@@ -139,11 +144,16 @@ export default function Example() {
         <div className="hidden w-28 bg-indigo-700 overflow-y-auto md:block">
           <div className="w-full py-6 flex flex-col items-center">
             <div className="flex-shrink-0 flex items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                alt="Workflow"
-              />
+
+            <Image
+               className="h-8 w-auto"
+                  src={imgF}
+                  alt="logo"
+                  width={auto}
+                  height={32}
+           
+                />
+         
             </div>
             <div className="flex-1 mt-6 w-full px-2 space-y-1">
               {navigation.map((item) => (
@@ -217,11 +227,14 @@ export default function Example() {
                     </div>
                   </Transition.Child>
                   <div className="flex-shrink-0 px-4 flex items-center">
-                    <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
-                      alt="Workflow"
-                    />
+                  <Image
+               className="h-8 w-auto"
+                  src={imgF}
+                  alt="logo"
+                  width={auto}
+                  height={32}
+           
+                />
                   </div>
                   <div className="mt-5 flex-1 h-0 px-2 overflow-y-auto">
                     <nav className="h-full flex flex-col">
@@ -308,11 +321,17 @@ export default function Example() {
                     <div>
                       <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
-                          alt=""
-                        />
+
+
+                        <Image
+               className="h-8 w-8 rounded-full"
+                  src={girl}
+                  alt="logo"
+                  width={32}
+                  height={32}
+           
+                />
+                      
                       </Menu.Button>
                     </div>
                     <Transition
@@ -484,7 +503,7 @@ export default function Example() {
               <div className="pb-16 space-y-6">
                 <div>
                   <div className="block w-full aspect-w-10 aspect-h-7 rounded-lg overflow-hidden">
-                    <img src={currentFile.source} alt="" className="object-cover" />
+                    <Image src={currentFile.source} alt="" width={auto} heigh={auto} className="object-cover" />
                   </div>
                   <div className="mt-4 flex items-start justify-between">
                     <div>

@@ -101,12 +101,17 @@ export default function Home() {
                 </a>
               </Link>
 
+                <Link     href="#">
+                
+              
               <a
-                href="#"
+            
                 className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
               >
-                Contact
-              </a>
+                       </a>
+                  </Link>
+               
+       
               {user ? (
                 <a
                   onClick={() =>
