@@ -17,6 +17,7 @@
   }
   ```
 */
+
 import Image from 'next/image';
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
@@ -505,7 +506,7 @@ export default function Example() {
               <div className="pb-16 space-y-6">
                 <div>
                   <div className="block w-full aspect-w-10 aspect-h-7 rounded-lg overflow-hidden">
-                    <Image src={currentFile.source} alt="" width={auto} heigh={auto} className="object-cover" />
+                    <Image src={currentFile.source} alt="" layout='fill' className="object-cover" />
                   </div>
                   <div className="mt-4 flex items-start justify-between">
                     <div>
