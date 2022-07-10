@@ -17,6 +17,7 @@
   }
   ```
 */
+import Image from 'next/image';
 import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
@@ -121,6 +122,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
+
+
+const imgP = "https://tailwindui.com/img/logos/workflow-mark.svg?color=white";
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -139,10 +143,13 @@ export default function Example() {
         <div className="hidden w-28 bg-indigo-700 overflow-y-auto md:block">
           <div className="w-full py-6 flex flex-col items-center">
             <div className="flex-shrink-0 flex items-center">
-              <img
+              <Image
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
+                src={imgP}
                 alt="Workflow"
+                width={32}
+                height={32}
+                layout="responsive"
               />
             </div>
             <div className="flex-1 mt-6 w-full px-2 space-y-1">
@@ -217,10 +224,12 @@ export default function Example() {
                     </div>
                   </Transition.Child>
                   <div className="flex-shrink-0 px-4 flex items-center">
-                    <img
+                    <Image
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/workflow-mark.svg?color=white"
+                      src={imgP}
                       alt="Workflow"
+                      width={32}
+                      height={32}
                     />
                   </div>
                   <div className="mt-5 flex-1 h-0 px-2 overflow-y-auto">
@@ -308,10 +317,12 @@ export default function Example() {
                     <div>
                       <Menu.Button className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span className="sr-only">Open user menu</span>
-                        <img
+                        <Image
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80"
+                          src={imgP}
                           alt=""
+                          height={32}
+                          width={32}
                         />
                       </Menu.Button>
                     </div>
@@ -457,12 +468,17 @@ export default function Example() {
                           )}
                         >
                           <img
+                        
                             src={file.source}
                             alt=""
                             className={classNames(
                               file.current ? '' : 'group-hover:opacity-75',
                               'object-cover pointer-events-none'
-                            )}
+                            )
+
+                          
+                          
+                          }
                           />
                           <button type="button" className="absolute inset-0 focus:outline-none">
                             <span className="sr-only">View details for {file.name}</span>
