@@ -15,7 +15,7 @@ function Speech() {
     <div>
 <section className="w-full max-w-2xl px-6 py-4 mx-auto mt-28 bg-white rounded-md shadow-md dark:bg-gray-800">
         <h2 className="text-3xl font-semibold text-center text-gray-800 dark:text-white">Speak by Typing Service</h2>
-        <p className="mt-3 text-center text-gray-600 dark:text-gray-400">Type your text on the textbox and click on "Talk" to convert your text to speech.</p>
+        <p className="mt-3 text-center text-gray-600 dark:text-gray-400">Type your text on the textbox and click on `&quot;`Talk`&quot;`to convert your text to speech.</p>
         
       
         <div className="mt-6 ">

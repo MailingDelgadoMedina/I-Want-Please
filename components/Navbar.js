@@ -1,77 +1,137 @@
 import React from 'react'
 import logo from '../public/static/Logo_I_Want_Please.svg'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from "react";
+import { useTheme } from "next-themes";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/config";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/router";
+
+const twoKids =
+  "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
+
+const hero_image =
+  "https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=748&q=80";
+
+
 function Navbar() {
+
+    const [menu, setMenu] = useState(false);
+    const { theme, setTheme } = useTheme("dark");
+    const [user, loading, error] = useAuthState(auth);
+    const router = useRouter();
+  
+
   return (
     <div>
 
 
-<nav className="bg-white shadow dark:bg-gray-800">
-        <div className="container px-6 py-4 mx-auto">
-            <div className="md:flex md:items-center md:justify-between">
-                <div className="flex items-center justify-between">
-                    <div className="text-xl font-semibold text-gray-700">
-                        <a className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300" href="/">
-
-                            <Image
-                               src={logo}
-                               alt="logo"
-                               width={56}
-                               height={56}
-                               className="hover:scale-105 transition-all duration-200"
-
-                                />
-
-
-                        </a>
-                    </div>
-{/* 
-                    <!-- Mobile menu button --> */}
-                    <div className="flex md:hidden">
-                        <button type="button" className="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400" aria-label="toggle menu">
-                            <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
-                                <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                {/* <!-- Mobile Menu open: "block", Menu closed: "hidden" --> */}
-                <div className="flex-1 md:flex md:items-center md:justify-between">
-                    <div className="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
-                        <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Join Slack</a>
-                        <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Browse Topics</a>
-                        <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Random Item</a>
-                        <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Experts</a>
-                    </div>
-
-                    <div className="flex items-center mt-4 md:mt-0">
-                        <button className="hidden mx-4 text-gray-600 transition-colors duration-200 transform md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none" aria-label="show notifications">
-                            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 17H20L18.5951 15.5951C18.2141 15.2141 18 14.6973 18 14.1585V11C18 8.38757 16.3304 6.16509 14 5.34142V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V5.34142C7.66962 6.16509 6 8.38757 6 11V14.1585C6 14.6973 5.78595 15.2141 5.40493 15.5951L4 17H9M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M15 17H9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </button>
-
-                        <button type="button" className="flex items-center focus:outline-none" aria-label="toggle profile dropdown">
-                            <div className="w-8 h-8 overflow-hidden border-2 border-gray-400 rounded-full">
-
-
-                            <Image
+<header className="flex flex-col bg-white dark:bg-gray-800">
+        <nav className="px-6 py-4 shadow">
+          <div className="relative lg:flex flex-row p-8 lg:justify-between">
+            <div className="flex items-center justify-between w-full">
+              <div className="flex justify-center content-center">
+                <Image
                   src={logo}
                   alt="logo"
                   width={56}
                   height={56}
                   className="hover:scale-105 transition-all duration-200"
                 />
-                            </div>
+                <Link href="/">
+                  <a className="place-self-center  mx-4 text-2xl font-bold text-gray-800 dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">
+                    I Want Please
+                  </a>
+                </Link>
+              </div>
 
-                            <h3 className="mx-2 text-sm font-medium text-gray-700 dark:text-gray-200 md:hidden">Khatab wedaa</h3>
-                        </button>
-                    </div>
-                </div>
+              {
+                //<!-- Mobile menu button -->
+              }
+              <div className="lg:hidden bg-white dark:bg-slate-700">
+                <button
+                  onClick={() => setMenu(!menu)}
+                  type="button"
+                  className=" text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                  aria-label="Toggle menu"
+                >
+                  <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current m-2">
+                    <path d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
-        </div>
-    </nav>
+
+            {
+              // Mobile Menu open: "block", Menu closed: "hidden"
+            }
+            <div
+              className={`rounded flex flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:w-full lg:justify-end lg:items-center bg-gray-200/90 dark:bg-slate-700/90  lg:shadow-none lg:bg-transparent lg:dark:bg-transparent ${
+                menu
+                  ? "text-right absolute right-8 z-10 shadow-lg"
+                  : "hidden lg:flex"
+              }`}
+            >
+              <Link href="/">
+                <a className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                  Home
+                </a>
+              </Link>
+              <Link href="/iwant">
+                <a className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                  I want
+                </a>
+              </Link>
+
+                <Link     href="#">
+                
+              
+              <a
+            
+                className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                       </a>
+                  </Link>
+               
+       
+              {user ? (
+                <a
+                  onClick={() =>
+                    signOut(auth, () => {
+                      router.push("/");
+                      console.log("Logged out");
+                    })
+                  }
+                  className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+                >
+                  Log Out
+                </a>
+              ) : (
+                <Link href="/login">
+                  <a className="px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2">
+                    Log In
+                  </a>
+                </Link>
+              )}
+
+              <a
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className=" lg:mr-12 cursor-pointer px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100 hover:font-medium lg:mx-2"
+              >
+                🌙/🌞
+                {
+                  // theme === "dark" ? "🌙" : "🌞"
+                }
+              </a>
+            </div>
+          </div>
+        </nav>
+
+        
+      
+      </header>
 
 
     </div>
