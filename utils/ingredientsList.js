@@ -1,4 +1,4 @@
-const ingredients = [
+export const ingredients = [
   ["5 spice powder", "1002002"],
   ["acorn squash", "11482"],
   ["adobo sauce", "6979"],

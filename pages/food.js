@@ -2,14 +2,12 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Select from "../components/Select";
 
-
 import { recipesAdvancedSearchFields } from "../utils/recipesAdvancedSearchFields";
 
+console.log({ recipesAdvancedSearchFields });
 
-
-
-const gred="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80";
-
+const gred =
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80";
 
 const defaultRecipes = {
   results: [
@@ -113,7 +111,7 @@ const advancedSearchForRecipes = async (
 
 const Card = ({ recipe }) => {
   return (
-    <div className="bg-yellow-400 p-2 m-2 w-56 hover:cursor-pointer dark:text-gray-800 hover:scale-105 transition-all duration-300">
+    <div className="bg-gray-200 dark:bg-gray-700 p-2 m-2 w-56 hover:cursor-pointer dark:text-gray-200 hover:scale-105 transition-all duration-300">
       <Image
         alt="food picture"
         src={recipe.image}
@@ -135,208 +133,124 @@ const Food = () => {
   const searchRef = useRef("");
   const [advancedSearch, setAdvancedSearch] = useState(false);
   const [submenu, setSubmenu] = useState(false);
+  const [advancedSearchQuery, setAdvancedSearchQuery] = useState({
+    cuisine: "",
+    excludeCuisine: "",
+    diet: "",
+    intolerances: "",
+    includeIngredients: "",
+  });
 
   useEffect(() => {
-    console.log({ submenu });
+    // console.log({ advancedSearch });
+    // console.log({ recipesAdvancedSearchFields });
   }),
-    [submenu];
+    [advancedSearch];
+
+  useEffect(() => {
+    console.log({ advancedSearchQuery });
+  }),
+    [advancedSearchQuery];
 
   return (
     <div className="flex flex-col justify-center items-center py-2">
-      <section className="m-4 max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
+      <section className="m-4 p-6 max-w-[950px] mx-auto w-4/6 bg-white rounded-md shadow-md dark:bg-gray-800">
         <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">
           I Want Please | Search for:
         </h2>
 
         <form>
           <div className="flex flex-col gap-6 mt-4 sm:grid-cols-2">
+            <div>
+              <label
+                className="text-gray-700 dark:text-gray-200"
+                htmlFor="search"
+              >
+                Recipe Name
+              </label>
+              <input
+                ref={searchRef}
+                id="search"
+                type="text"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+              />
+            </div>
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                const query = searchRef.current.value;
+                searchForRecipes(query).then((data) => {
+                  setRecipes(data);
+                  searchRef.current.value = "";
+                });
+              }}
+              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+            >
+              Search
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+
+                setAdvancedSearch(!advancedSearch);
+              }}
+              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+            >
+              {advancedSearch ? "Simple Search" : "Advanced Search"}
+            </button>
             {advancedSearch ? (
               <>
-                <div>
-                  <label
-                    className="text-gray-700 dark:text-gray-200"
-                    htmlFor="search"
-                  >
-                    Recipe Name
-                  </label>
-                  <input
-                    ref={searchRef}
-                    id="search"
-                    type="text"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-                  />
+                <div className="grid grid-cols-2 md:grid-cols-3">
+                  {recipesAdvancedSearchFields.map((field, idx) => {
+                    const name = Object.keys(field);
+
+                    if (field[name].hidden === false) {
+                      // console.log(field);
+                      if (field[name] === "includeIngredients") {
+                        console.log("AHAAAAA", { field });
+                        return (
+                          <Select
+                            name={name}
+                            key={idx.toString() + name}
+                            values={field[name].values.map(
+                              (ingredient) => ingredient[0][0][0]
+                            )}
+                            advancedSearchQuery={advancedSearchQuery}
+                            setAdvancedSearchQuery={setAdvancedSearchQuery}
+                          />
+                        );
+                      } else {
+                        return (
+                          <Select
+                            name={name}
+                            key={idx.toString() + name}
+                            values={field[name].values}
+                            advancedSearchQuery={advancedSearchQuery}
+                            setAdvancedSearchQuery={setAdvancedSearchQuery}
+                          />
+                        );
+                      }
+                    }
+                  })}
                 </div>
-
-                <div className="flex items-center justify-center">
-                  <div className="relative inline-block w-full">
-                    {/* -- Dropdown toggle button --> */}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSubmenu(!submenu);
-                      }}
-                      className="relative z-10 px-6 py-2 w-full leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-                    >
-                      Cuisine
-                    </button>
-
-                    {/* -- Dropdown menu --> */}
-                    {submenu ? (
-                      <div className="absolute z-20 mt-2 overflow-hidden bg-white rounded-md shadow-lg w-80 dark:bg-gray-800">
-                        <div className="py-2">
-                          <a className="flex items-center px-4 py-3 -mx-2 transition-colors duration-200 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700">
-                            <Image
-                              className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-                              src={gred}
-                              alt="avatar"
-                              width={32}
-                              height={32}
-                              
-                            />
-                            <p className="mx-2 text-sm text-gray-600 dark:text-white">
-                              <span className="font-bold">Sara Salah</span>{" "}
-                              replied on the{" "}
-                              <span className="font-bold text-blue-500">
-                                Upload Image
-                              </span>{" "}
-                              artical . 2m
-                            </p>
-                          </a>
-                          <a className="flex items-center px-4 py-3 -mx-2 transition-colors duration-200 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700">
-                            <Image
-                              className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-                              src={gred}
-                              alt="avatar"
-                              width={32}
-                              height={32}
-                            />
-                            <p className="mx-2 text-sm text-gray-600 dark:text-white">
-                              <span className="font-bold">Slick Net</span> start
-                              following you . 45m
-                            </p>
-                          </a>
-                          <a className="flex items-center px-4 py-3 -mx-2 transition-colors duration-200 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700">
-                            <Image
-                              className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-                              src={gred}
-                              alt="avatar"
-                              width={32}
-                              height={32}
-                            />
-                            <p className="mx-2 text-sm text-gray-600 dark:text-white">
-                              <span className="font-bold">Jane Doe</span> Like
-                              Your reply on{" "}
-                              <span className="font-bold text-blue-500">
-                                Test with TDD
-                              </span>{" "}
-                              artical . 1h
-                            </p>
-                          </a>
-                          <a className="flex items-center px-4 py-3 -mx-2 transition-colors duration-200 transform hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <Image
-                              className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-                              src={gred}
-                              alt="avatar"
-                              width={32}
-                              height={32}
-                            />
-                            <p className="mx-2 text-sm text-gray-600 dark:text-white">
-                              <span className="font-bold">Abigail Bennett</span>{" "}
-                              start following you . 3h
-                            </p>
-                          </a>
-                        </div>
-                        <a className="block py-2 font-bold text-center text-white bg-gray-800 dark:bg-gray-700 hover:underline">
-                          See all notifications
-                        </a>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const query = searchRef.current.value;
-                    searchForRecipes(query).then((data) => {
-                      setRecipes(data);
-                      searchRef.current.value = "";
-                    });
-                  }}
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-                >
-                  Search
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    setAdvancedSearch(true);
-                  }}
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-                >
-                  Advanced Search
-                </button>
               </>
             ) : (
-              <>
-                <div>
-                  <label
-                    className="text-gray-700 dark:text-gray-200"
-                    htmlFor="search"
-                  >
-                    Recipe Name
-                  </label>
-                  <input
-                    ref={searchRef}
-                    id="search"
-                    type="text"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-                  />
-                </div>
-
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const query = searchRef.current.value;
-                    searchForRecipes(query).then((data) => {
-                      setRecipes(data);
-                      searchRef.current.value = "";
-                    });
-                  }}
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-                >
-                  Search
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-
-                    setAdvancedSearch(true);
-                  }}
-                  className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-                >
-                  Advanced Search
-                </button>
-              </>
+              <></>
             )}
           </div>
         </form>
       </section>
 
-      <div className="grid grid-cols-2">
-        {recipesAdvancedSearchFields.map((field) => {
-          const name = Object.keys(field);
-          console.log(field[name]);
-          if (field[name].hidden === false) {
-            return <Select name={name} key={name} />;
-          }
-        })}
+      <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {recipes ? (
+          recipes.results.map((recipe, idx) => {
+            return <Card key={idx} recipe={recipe} />;
+          })
+        ) : (
+          <p>No recipes found</p>
+        )}
       </div>
-
-      {recipes.results.map((recipe, idx) => {
-        return <Card key={idx} recipe={recipe} />;
-      })}
     </div>
   );
 };
