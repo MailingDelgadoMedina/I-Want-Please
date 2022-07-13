@@ -20,25 +20,33 @@ const Select = ({
       <select
         id={name}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 capitalize"
-        defaultValue="noOption"
+        defaultValue=""
         onChange={(e) => {
           setAdvancedSearchQuery({
             ...advancedSearchQuery,
-            [name[0]]: e.target.value,
+            [name[0]]: e.target.value.replace(/\s+/g, "%20"),
           });
           // console.log(e.target.value);
           // console.log(name[0]);
         }}
       >
-        <option value="noOption" className="">
+        <option value="" className="">
           Choose value...
         </option>
         {values.map((value, idx) => {
-          return (
-            <option key={idx} value={value} className="">
-              {value}
-            </option>
-          );
+          if (typeof value === "string") {
+            return (
+              <option key={idx} value={value} className="capitalize">
+                {value}
+              </option>
+            );
+          } else {
+            return (
+              <option key={idx} value={value[0]} className="">
+                {value[0]}
+              </option>
+            );
+          }
         })}
       </select>
     </div>

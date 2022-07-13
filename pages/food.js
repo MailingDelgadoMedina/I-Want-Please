@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Select from "../components/Select";
+import { ChevronDoubleDownIcon } from "@heroicons/react/outline";
 
 import { recipesAdvancedSearchFields } from "../utils/recipesAdvancedSearchFields";
-
-console.log({ recipesAdvancedSearchFields });
 
 const gred =
   "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80";
@@ -96,19 +95,6 @@ const searchForRecipes = async (query = "pasta") => {
   return data;
 };
 
-const advancedSearchForRecipes = async (
-  query = "pasta",
-  cousine = "european",
-  diet = "ovo vegetarian"
-) => {
-  const result = await fetch(
-    `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=${query}&cuisine=${cousine}&diet=${diet}`,
-    options
-  );
-  const data = await result.json();
-  return data;
-};
-
 const Card = ({ recipe }) => {
   return (
     <div className="bg-gray-200 dark:bg-gray-700 p-2 m-2 w-56 hover:cursor-pointer dark:text-gray-200 hover:scale-105 transition-all duration-300">
@@ -141,6 +127,29 @@ const Food = () => {
     includeIngredients: "",
   });
 
+  const advancedSearchForRecipes = async (
+    query = "fish",
+    stringToSearch = transformAdvancedSearchQuery()
+  ) => {
+    const result = await fetch(
+      `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=${query}${stringToSearch}`,
+      options
+    );
+    const data = await result.json();
+    return data;
+  };
+
+  // Function to transform advancedSearchQuery to a string
+  const transformAdvancedSearchQuery = () => {
+    let query = "";
+    for (let key in advancedSearchQuery) {
+      if (advancedSearchQuery[key] !== "") {
+        query += `&${key}=${advancedSearchQuery[key]}`;
+      }
+    }
+    return query;
+  };
+
   useEffect(() => {
     // console.log({ advancedSearch });
     // console.log({ recipesAdvancedSearchFields });
@@ -149,12 +158,13 @@ const Food = () => {
 
   useEffect(() => {
     console.log({ advancedSearchQuery });
+    console.log(transformAdvancedSearchQuery());
   }),
     [advancedSearchQuery];
 
   return (
     <div className="flex flex-col justify-center items-center py-2">
-      <section className="m-4 p-6 max-w-[950px] mx-auto w-4/6 bg-white rounded-md shadow-md dark:bg-gray-800">
+      <section className="m-4 p-6 max-w-[950px] mx-auto sm:w-4/6 bg-white rounded-md shadow-md dark:bg-gray-800">
         <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">
           I Want Please | Search for:
         </h2>
@@ -179,25 +189,19 @@ const Food = () => {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                const query = searchRef.current.value;
-                searchForRecipes(query).then((data) => {
-                  setRecipes(data);
-                  searchRef.current.value = "";
-                });
-              }}
-              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-            >
-              Search
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
 
                 setAdvancedSearch(!advancedSearch);
               }}
-              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              className="flex justify-center items-center px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
             >
-              {advancedSearch ? "Simple Search" : "Advanced Search"}
+              <div
+                className={`text-cyan-300 h-8 w-8 mr-2 transition-all duration-300 ${
+                  advancedSearch ? "rotate-180" : ""
+                }`}
+              >
+                {<ChevronDoubleDownIcon />}
+              </div>
+              {advancedSearch ? `Show Simple Search` : "Show Advanced Search"}
             </button>
             {advancedSearch ? (
               <>
@@ -238,6 +242,24 @@ const Food = () => {
             ) : (
               <></>
             )}
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                const query = searchRef.current.value;
+                advancedSearch
+                  ? advancedSearchForRecipes(query).then((data) => {
+                      setRecipes(data);
+                      searchRef.current.value = "";
+                    })
+                  : searchForRecipes(query).then((data) => {
+                      setRecipes(data);
+                      searchRef.current.value = "";
+                    });
+              }}
+              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+            >
+              {advancedSearch ? "Advanced Search" : "Search"}
+            </button>
           </div>
         </form>
       </section>
