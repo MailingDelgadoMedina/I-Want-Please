@@ -1,7 +1,35 @@
-// 0. hidden: true, don't show
-// 1. combine: "csv" true? ==> multiple selections
-// 2. if values.length>0, we got the list for the select Options
-// 3. if values.length===0 if default "true" || "false" ==> boolean
+import { useState } from "react";
+import { components } from "react-select";
+import { default as ReactSelect } from "react-select";
+
+//custom component for the dropdown.
+const Option = (props) => {
+  return (
+    <div>
+      <components.Option {...props}>
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => null}
+        />{" "}
+        <label>{props.label}</label>
+      </components.Option>
+    </div>
+  );
+};
+
+export const colourOptions = [
+  { value: "ocean1", label: "Ocean" },
+  { value: "blue", label: "Blue" },
+  { value: "purple", label: "Purple" },
+  { value: "red", label: "Red" },
+  { value: "orange", label: "Orange" },
+  { value: "yellow", label: "Yellow" },
+  { value: "green", label: "Green" },
+  { value: "forest", label: "Forest" },
+  { value: "slate", label: "Slate" },
+  { value: "silver", label: "Silver" },
+];
 
 const Select = ({
   name = "noOption",
@@ -9,6 +37,17 @@ const Select = ({
   advancedSearchQuery,
   setAdvancedSearchQuery,
 }) => {
+  const [optionSelected, setOptionSelected] = useState(null);
+
+  const handleChange = (selected) => {
+    setOptionSelected(selected);
+    setAdvancedSearchQuery({
+      ...advancedSearchQuery,
+      [name[0]]: selected.map((option) => option.value.replace(/\s+/g, "%20")),
+    });
+    console.log({ selected });
+    console.log(name[0]);
+  };
   return (
     <div className="m-2">
       <label
@@ -17,38 +56,20 @@ const Select = ({
       >
         {name}
       </label>
-      <select
+      <ReactSelect
+        className="dark:text-white dark:bg-gray-600 bg-red-500"
         id={name}
-        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 capitalize"
-        defaultValue=""
-        onChange={(e) => {
-          setAdvancedSearchQuery({
-            ...advancedSearchQuery,
-            [name[0]]: e.target.value.replace(/\s+/g, "%20"),
-          });
-          // console.log(e.target.value);
-          // console.log(name[0]);
+        options={values}
+        isMulti
+        closeMenuOnSelect={false}
+        hideSelectedOptions={false}
+        components={{
+          Option,
         }}
-      >
-        <option value="" className="">
-          Choose value...
-        </option>
-        {values.map((value, idx) => {
-          if (typeof value === "string") {
-            return (
-              <option key={idx} value={value} className="capitalize">
-                {value}
-              </option>
-            );
-          } else {
-            return (
-              <option key={idx} value={value[0]} className="">
-                {value[0]}
-              </option>
-            );
-          }
-        })}
-      </select>
+        onChange={handleChange}
+        allowSelectAll={true}
+        value={optionSelected}
+      />
     </div>
   );
 };

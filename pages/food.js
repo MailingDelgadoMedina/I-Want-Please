@@ -195,7 +195,7 @@ const Food = () => {
               className="flex justify-center items-center px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
             >
               <div
-                className={`text-cyan-300 h-8 w-8 mr-2 transition-all duration-300 ${
+                className={`text-gray-300 h-6 w-6 mr-2 transition-all duration-300 ${
                   advancedSearch ? "rotate-180" : ""
                 }`}
               >
@@ -210,30 +210,89 @@ const Food = () => {
                     const name = Object.keys(field);
 
                     if (field[name].hidden === false) {
-                      // console.log(field);
-                      if (field[name] === "includeIngredients") {
-                        console.log("AHAAAAA", { field });
+                      console.log(name[0], "is VISIBLE");
+                      if (name[0] === "includeIngredients") {
                         return (
                           <Select
                             name={name}
                             key={idx.toString() + name}
-                            values={field[name].values.map(
-                              (ingredient) => ingredient[0][0][0]
-                            )}
+                            values={field[name].values
+                              .map((ingredient) => ingredient[0])
+                              .map((value) => ({
+                                value: value,
+                                label: value,
+                              }))}
                             advancedSearchQuery={advancedSearchQuery}
                             setAdvancedSearchQuery={setAdvancedSearchQuery}
                           />
                         );
                       } else {
-                        return (
-                          <Select
-                            name={name}
-                            key={idx.toString() + name}
-                            values={field[name].values}
-                            advancedSearchQuery={advancedSearchQuery}
-                            setAdvancedSearchQuery={setAdvancedSearchQuery}
-                          />
-                        );
+                        if (field[name].combine === "csv") {
+                          return (
+                            <Select
+                              name={name}
+                              key={idx.toString() + name}
+                              values={field[name].values.map((value) => ({
+                                value: value,
+                                label: value,
+                              }))}
+                              advancedSearchQuery={advancedSearchQuery}
+                              setAdvancedSearchQuery={setAdvancedSearchQuery}
+                            />
+                          );
+                        } else {
+                          return (
+                            <div className="m-2">
+                              <label
+                                htmlFor={name}
+                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400 capitalize"
+                              >
+                                {name}
+                              </label>
+                              <select
+                                id={name}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 capitalize"
+                                defaultValue=""
+                                onChange={(e) => {
+                                  setAdvancedSearchQuery({
+                                    ...advancedSearchQuery,
+                                    [name[0]]: e.target.value.replace(
+                                      /\s+/g,
+                                      "%20"
+                                    ),
+                                  });
+                                }}
+                              >
+                                <option value="" className="">
+                                  Select...
+                                </option>
+                                {field[name].values.map((value, idx) => {
+                                  if (typeof value === "string") {
+                                    return (
+                                      <option
+                                        key={idx}
+                                        value={value}
+                                        className="capitalize"
+                                      >
+                                        {value}
+                                      </option>
+                                    );
+                                  } else {
+                                    return (
+                                      <option
+                                        key={idx}
+                                        value={value[0]}
+                                        className=""
+                                      >
+                                        {value[0]}
+                                      </option>
+                                    );
+                                  }
+                                })}
+                              </select>
+                            </div>
+                          );
+                        }
                       }
                     }
                   })}
