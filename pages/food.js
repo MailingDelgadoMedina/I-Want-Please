@@ -192,10 +192,10 @@ const Food = () => {
 
                 setAdvancedSearch(!advancedSearch);
               }}
-              className="flex justify-center items-center px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              className=" text-gray-700 flex justify-center items-center px-6 py-2 leading-5 dark:text-white transition-colors duration-200 transform bg-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-400 hover:text-black dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
             >
               <div
-                className={`text-gray-300 h-6 w-6 mr-2 transition-all duration-300 ${
+                className={`text-gray-700 hover:text-black dark:text-gray-300 h-6 w-6 mr-2 transition-all duration-300 ${
                   advancedSearch ? "rotate-180" : ""
                 }`}
               >
@@ -315,7 +315,7 @@ const Food = () => {
                       searchRef.current.value = "";
                     });
               }}
-              className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              className="px-6 py-2 leading-5 text-gray-700 dark:text-white transition-colors duration-200 transform bg-gray-300 hover:text-black dark:bg-gray-700 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
             >
               {advancedSearch ? "Advanced Search" : "Search"}
             </button>
