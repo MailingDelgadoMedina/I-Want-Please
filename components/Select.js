@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { components } from "react-select";
+import { components, createFilter } from "react-select";
 import { default as ReactSelect } from "react-select";
 
-//custom component for the dropdown.
+// //custom checkbox component for the dropdown.
 const Option = (props) => {
+  console.log("😺", props);
   return (
     <div>
       <components.Option {...props}>
@@ -40,24 +41,6 @@ const customStyles = {
     background: "#374151",
   }),
 
-  // multiValue: (base) => ({
-  //   ...base,
-  //   color: "white",
-  //   background: "#374151",
-  // }),
-  // multiValueLabel: (base) => ({
-  //   ...base,
-  //   color: "white",
-  //   fontSize: "0.875rem",
-  // }),
-  // multiValueRemove: (base) => ({
-  //   ...base,
-  //   color: "red",
-  //   background: "#374151",
-  //   "&:hover": {
-  //     background: "pink",
-  //   },
-  // }),
   option: (base) => ({
     ...base,
     background: "#374151",
@@ -78,11 +61,7 @@ const customStyles = {
     color: "white",
     fontSize: "0.875rem",
   }),
-  // singleValue: (base) => ({
-  //   ...base,
-  //   color: "yellow",
-  //   fontSize: "0.875rem",
-  // }),
+
   indicatorSeparator: (base) => ({
     ...base,
     display: "none",
@@ -116,24 +95,6 @@ const customStylesWhite = {
     background: "white",
   }),
 
-  // multiValue: (base) => ({
-  //   ...base,
-  //   color: "white",
-  //   background: "#374151",
-  // }),
-  // multiValueLabel: (base) => ({
-  //   ...base,
-  //   color: "white",
-  //   fontSize: "0.875rem",
-  // }),
-  // multiValueRemove: (base) => ({
-  //   ...base,
-  //   color: "red",
-  //   background: "#374151",
-  //   "&:hover": {
-  //     background: "pink",
-  //   },
-  // }),
   option: (base) => ({
     ...base,
     background: "white",
@@ -151,11 +112,7 @@ const customStylesWhite = {
     color: "black",
     fontSize: "0.875rem",
   }),
-  // singleValue: (base) => ({
-  //   ...base,
-  //   color: "yellow",
-  //   fontSize: "0.875rem",
-  // }),
+
   indicatorSeparator: (base) => ({
     ...base,
     display: "none",
@@ -198,19 +155,18 @@ const Select = ({
         {name}
       </label>
       <ReactSelect
+        components={{ Option }}
+        filterOption={createFilter({ ignoreAccents: false })}
         popout={true}
         controlShouldRenderValue={false}
         isClearable={true}
         backspaceRemovesValue={false}
-        styles={customStylesWhite}
+        styles={false ? customStylesWhite : customStyles}
         id={name}
         options={values}
         isMulti
         closeMenuOnSelect={false}
         hideSelectedOptions={false}
-        components={{
-          Option,
-        }}
         onChange={handleChange}
         allowSelectAll={true}
         value={optionSelected}

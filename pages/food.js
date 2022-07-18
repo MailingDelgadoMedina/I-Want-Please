@@ -4,6 +4,7 @@ import Select from "../components/Select";
 import { ChevronDoubleDownIcon } from "@heroicons/react/outline";
 
 import { recipesAdvancedSearchFields } from "../utils/recipesAdvancedSearchFields";
+import Link from "next/link";
 
 const gred =
   "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80";
@@ -166,7 +167,7 @@ const Food = () => {
     <div className="flex flex-col justify-center items-center py-2">
       <section className="m-4 p-6 max-w-[950px] mx-auto sm:w-4/6 bg-white rounded-md shadow-md dark:bg-gray-800">
         <h2 className="text-lg font-semibold text-gray-700 capitalize dark:text-white">
-          I Want Please | Search for:
+          <Link href="/">I Want Please</Link> | Search for:
         </h2>
 
         <form>
@@ -217,7 +218,7 @@ const Food = () => {
                             name={name}
                             key={idx.toString() + name}
                             values={field[name].values
-                              .map((ingredient) => ingredient[0])
+                              .map((ingredient) => ingredient)
                               .map((value) => ({
                                 value: value,
                                 label: value,
