@@ -4,7 +4,6 @@ import { default as ReactSelect } from "react-select";
 
 // //custom checkbox component for the dropdown.
 const Option = (props) => {
-  console.log("😺", props);
   return (
     <div>
       <components.Option {...props}>

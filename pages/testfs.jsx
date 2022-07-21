@@ -22,7 +22,7 @@ const handleClick = (store) => {
 
 const Card = ({ store, clickToOpenModal }) => {
   return (
-    <div className="p-2 flex flex-col m-2 h-48 w-64 bg-slate-700 justify-between border-2 border-black shadow-sm shadow-yellow-400/50 hover:scale-105 transition-all duration-300">
+    <div className="p-2 flex flex-col m-2 h-48 w-64 bg-gray-200 dark:bg-slate-700 justify-between border-2 border-gray-400 dark:border-black shadow-sm shadow-gray-400/50 hover:scale-105 transition-all duration-300">
       <div
         className="h-full w-full text-center hover:cursor-pointer"
         onClick={(e) => {
@@ -146,12 +146,8 @@ const Testfs = () => {
     onceAtStartupFetchFastFoodStores();
   }, [latLong]);
 
-  // useEffect(() => {
-  //   console.log({ stores });
-  // }, [stores]);
-
   return (
-    <div className="relative flex flex-col items-center">
+    <div className="bg-white dark:bg-gray-800 dark:text-white relative flex flex-col items-center">
       {modal && (
         <div
           onClick={(e) => {
@@ -162,7 +158,7 @@ const Testfs = () => {
           className="modal bg-slate-700/90 fixed top-0 right-0 left-0 z-50 w-full flex flex-col justify-center items-center overflow-y-auto overflow-x-hidden md:inset-0 h-modal md:h-full"
         >
           {
-            <div className="bg-yellow-300 w-96 h-72 flex justify-center items-center">
+            <div className="w-96 h-72 flex justify-center items-center">
               {selectedStore.photos.length > 0 ? (
                 <Swiper
                   className="bg-gray-500 h-full w-full"
@@ -242,11 +238,13 @@ const Testfs = () => {
       <h2 className="text-xl text-center">{`${
         nearby ? "Nearby" : "Jacksonville"
       } FastFood Stores`}</h2>
-      {stores.map((store, idx) => {
-        return (
-          <Card key={idx} store={store} clickToOpenModal={clickToOpenModal} />
-        );
-      })}
+      <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {stores.map((store, idx) => {
+          return (
+            <Card key={idx} store={store} clickToOpenModal={clickToOpenModal} />
+          );
+        })}
+      </div>
     </div>
   );
 };

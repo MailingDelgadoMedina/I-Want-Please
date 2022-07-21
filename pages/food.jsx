@@ -85,20 +85,24 @@ const options = {
   },
 };
 
-// https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=pasta&cuisine=italian&excludeCuisine=greek&diet=vegetarian&intolerances=gluten&equipment=pan&includeIngredients=tomato%2Ccheese&excludeIngredients=eggs&type=main%20course&instructionsRequired=true&fillIngredients=false&addRecipeInformation=false&titleMatch=Crock%20Pot&maxReadyTime=20&ignorePantry=true&sort=calories&sortDirection=asc&minCarbs=10&maxCarbs=100&minProtein=10&maxProtein=100&minCalories=50&maxCalories=800&minFat=10&maxFat=100&minAlcohol=0&maxAlcohol=100&minCaffeine=0&maxCaffeine=100&minCopper=0&maxCopper=100&minCalcium=0&maxCalcium=100&minCholine=0&maxCholine=100&minCholesterol=0&maxCholesterol=100&minFluoride=0&maxFluoride=100&minSaturatedFat=0&maxSaturatedFat=100&minVitaminA=0&maxVitaminA=100&minVitaminC=0&maxVitaminC=100&minVitaminD=0&maxVitaminD=100&minVitaminE=0&maxVitaminE=100&minVitaminK=0&maxVitaminK=100&minVitaminB1=0&maxVitaminB1=100&minVitaminB2=0&maxVitaminB2=100&minVitaminB5=0&maxVitaminB5=100&minVitaminB3=0&maxVitaminB3=100&minVitaminB6=0&maxVitaminB6=100&minVitaminB12=0&maxVitaminB12=100&minFiber=0&maxFiber=100&minFolate=0&maxFolate=100&minFolicAcid=0&maxFolicAcid=100&minIodine=0&maxIodine=100&minIron=0&maxIron=100&minMagnesium=0&maxMagnesium=100&minManganese=0&maxManganese=100&minPhosphorus=0&maxPhosphorus=100&minPotassium=0&maxPotassium=100&minSelenium=0&maxSelenium=100&minSodium=0&maxSodium=100&minSugar=0&maxSugar=100&minZinc=0&maxZinc=100&offset=0&number=10&limitLicense=false&ranking=2
-
-const searchForRecipes = async (query = "pasta") => {
+const getRecipeDetails = async (id) => {
   const result = await fetch(
-    `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=${query}`,
+    `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`,
     options
   );
   const data = await result.json();
-  return data;
+  console.log(data);
 };
 
 const Card = ({ recipe }) => {
   return (
-    <div className="bg-gray-200 dark:bg-gray-700 p-2 m-2 w-56 hover:cursor-pointer dark:text-gray-200 hover:scale-105 transition-all duration-300">
+    <div
+      className="bg-gray-200 dark:bg-gray-700 p-2 m-2 w-56 hover:cursor-pointer dark:text-gray-200 hover:scale-105 transition-all duration-300"
+      onClick={() => {
+        getRecipeDetails(recipe.id);
+        // window.location.href = `/recipe/${recipe.id}`;
+      }}
+    >
       <Image
         alt="food picture"
         src={recipe.image}
@@ -150,18 +154,29 @@ const Food = () => {
     }
     return query;
   };
+  // Search for bulk recipes by ID
+  // useEffect(() => {
+  //   fetch(
+  //     "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/informationBulk?ids=749013%2C358073%2C450759",
+  //     options
+  //   )
+  //     .then((response) => response.json())
+  //     .then((response) => console.log("Bulk", response))
+  //     .catch((err) => console.error(err));
+  // }),
+  //   [];
 
   useEffect(() => {
-    // console.log({ advancedSearch });
-    // console.log({ recipesAdvancedSearchFields });
+    const id = "749013";
+    fetch(
+      `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`,
+      options
+    )
+      .then((response) => response.json())
+      .then((response) => console.log("JustOne", response))
+      .catch((err) => console.error(err));
   }),
-    [advancedSearch];
-
-  useEffect(() => {
-    console.log({ advancedSearchQuery });
-    console.log(transformAdvancedSearchQuery());
-  }),
-    [advancedSearchQuery];
+    [];
 
   return (
     <div className="flex flex-col justify-center items-center py-2">
@@ -211,7 +226,6 @@ const Food = () => {
                     const name = Object.keys(field);
 
                     if (field[name].hidden === false) {
-                      console.log(name[0], "is VISIBLE");
                       if (name[0] === "includeIngredients") {
                         return (
                           <Select
@@ -306,15 +320,11 @@ const Food = () => {
               onClick={(e) => {
                 e.preventDefault();
                 const query = searchRef.current.value;
-                advancedSearch
-                  ? advancedSearchForRecipes(query).then((data) => {
-                      setRecipes(data);
-                      searchRef.current.value = "";
-                    })
-                  : searchForRecipes(query).then((data) => {
-                      setRecipes(data);
-                      searchRef.current.value = "";
-                    });
+                advancedSearchForRecipes(query).then((data) => {
+                  console.log("Data from advancedSearchForRecipes", data);
+                  setRecipes(data);
+                  searchRef.current.value = "";
+                });
               }}
               className="px-6 py-2 leading-5 text-gray-700 dark:text-white transition-colors duration-200 transform bg-gray-300 hover:text-black dark:bg-gray-700 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
             >
@@ -327,6 +337,7 @@ const Food = () => {
       <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {recipes ? (
           recipes.results.map((recipe, idx) => {
+            console.log({ recipe });
             return <Card key={idx} recipe={recipe} />;
           })
         ) : (
