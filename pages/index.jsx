@@ -14,7 +14,6 @@ import Counter from "../store/features/counter/Counter";
 import { ToggleTheme } from "../components/ToggleTheme";
 import { toggleTheme } from "../store/features/theme/themeSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useDarkMode } from "../utils/userDarkMode";
 
 const twoKids =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
@@ -24,12 +23,9 @@ const hero_image =
 
 export default function Home() {
   const [menu, setMenu] = useState(false);
-  const { theme, setTheme } = useTheme("dark");
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
   const dispatch = useDispatch();
-  const themeRedux = useSelector((state) => state.theme.value);
-  const [isDark, setIsDark] = useDarkMode();
 
   return (
     <div className="bg-white dark:bg-gray-800">

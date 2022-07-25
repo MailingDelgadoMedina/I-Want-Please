@@ -74,4 +74,4 @@ const fetchFastFoodPhoto = async (fsq_id = "4cf53d2b99c6236ab7054a67") => {
   }
 };
 
-export { fetchFastFoodStores, fetchFastFoodPhoto };
+export { fetchFastFoodStores };
