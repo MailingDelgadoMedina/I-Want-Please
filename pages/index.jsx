@@ -8,8 +8,6 @@ import { auth } from "../firebase/config";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import Footer from "../components/Footer";
-import logo from "../public/static/Logo_I_Want_Please.svg";
 import Counter from "../store/features/counter/Counter";
 import { ToggleTheme } from "../components/ToggleTheme";
 import { toggleTheme } from "../store/features/theme/themeSlice";
@@ -26,6 +24,9 @@ export default function Home() {
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
   const dispatch = useDispatch();
+  // const authorized = useAuth();
+
+  // if (authorized.loading) return "loading...";
 
   return (
     <div className="bg-white dark:bg-gray-800">

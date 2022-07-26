@@ -1,34 +1,88 @@
 import { useRef, useState, useEffect } from "react";
-import { auth, provider } from "../firebase/config";
+import { auth, provider, db } from "../firebase/config";
 import {
   signInWithRedirect,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import Image from "next/image";
 import Link from "next/link";
-import Footer from "../components/Footer";
+
+import { setUserGlobal } from "../store/features/user/userSlice";
+import { useDispatch } from "react-redux";
+import { async } from "@firebase/util";
 
 const loginPicture =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224865/iWantImg/login_pencils_dfrpcs.jpg";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [user, loading, error] = useAuthState(auth);
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [myMessage, setMessage] = useState("");
   const router = useRouter();
 
+  const theData = async () => {
+    //   const querySnapshot = await getDocs(collection(db, "users"));
+    //   console.log("querySnapshot is: ", querySnapshot);
+    //   querySnapshot.forEach((doc) => {
+    //     console.log("doc.data() is: ", doc.data());
+    //     console.log(`${doc.id} => ${doc.data().uid}`);
+    //   });
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        try {
+          const createdAt = new Date();
+          // doc.data() will be undefined in this case
+          console.log("No such document! I will create one!");
+          await setDoc(docRef, {
+            email: user.email,
+            name: user.displayName,
+            createdAt: createdAt.toISOString(),
+          });
+        } catch (error) {
+          console.log("Error creating user.", error);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    //Retrieve user in database or create it if uid is not found
+
+    theData();
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      const { uid, displayName, email, photoURL } = user;
+      router.push("/");
+      dispatch(setUserGlobal({ uid, displayName, email, photoURL }));
+      // Check if user is in database and create if not
+    } else {
+      dispatch(setUserGlobal(null));
+    }
+  }, [user]);
+
   //Google Login
   const googleProvider = (e) => {
+    console.log({ e });
     e.preventDefault();
 
     signInWithRedirect(auth, provider)
       .then((result) => {
+        console.log({ result });
         setMessage(result.displaName);
         router.push("/iwant");
       })
@@ -83,6 +137,10 @@ const Login = () => {
       `If there is an account associated with this email, we will send an email for reset to " ${emailRef.current.value}`
     );
   };
+
+  // if (user) {
+  //   return router.push("/iwant");
+  // }
 
   return (
     <>

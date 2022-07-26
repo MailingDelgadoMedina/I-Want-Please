@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../public/static/Logo_I_Want_Please.svg";
 import Image from "next/image";
 import Link from "next/link";
