@@ -1,4 +1,3 @@
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
@@ -8,16 +7,11 @@ import { auth } from "../firebase/config";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import Counter from "../store/features/counter/Counter";
-import { ToggleTheme } from "../components/ToggleTheme";
-import { toggleTheme } from "../store/features/theme/themeSlice";
+
 import { useDispatch, useSelector } from "react-redux";
 
 const twoKids =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
-
-const hero_image =
-  "https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=748&q=80";
 
 export default function Home() {
   const [menu, setMenu] = useState(false);
