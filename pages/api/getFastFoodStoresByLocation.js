@@ -4,7 +4,6 @@ const getFastFoodStoresByLocation = async (req, res) => {
   try {
     // console.log("req.query", req);
     // const { latLong } = req.query;
-    console.log("I AM TRYING!");
     const stores = await fetchFastFoodStores();
     res.status(200);
     res.json(stores);

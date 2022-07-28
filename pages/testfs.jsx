@@ -1,12 +1,25 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import fastFoodGenericPicture from "../public/static/fastfood.jpg";
-import { initialStores, initialSelectedstore } from "../foursquare/localData";
+import { initialStores } from "../foursquare/localData";
 import { useDispatch } from "react-redux";
-import { setSelectedStore } from "../store/features/fastfood/fastfoodSlice";
+import {
+  setFetchedStores,
+  setSelectedStore,
+} from "../store/features/fastfood/fastfoodSlice";
 
 import { useRouter } from "next/router";
 
+////// Server Side Code //////
+export async function getStaticProps(context) {
+  return {
+    props: {
+      fastfoodStores: initialStores,
+    }, // will be passed to the page component as props
+  };
+}
+
+////// Client Side Code //////
 const Card = ({ store, clickToOpenStorePage }) => {
   const storeLocation = `${
     store.location.formatted_address.length > 0
@@ -42,10 +55,10 @@ const Card = ({ store, clickToOpenStorePage }) => {
   );
 };
 
-const Testfs = () => {
+const Testfs = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [stores, setStores] = useState(initialStores);
+  const [stores, setStores] = useState(props.fastfoodStores);
   const [latLong, setLatLong] = useState(
     "40.71266484705233,-74.00646731123601"
   );
@@ -68,7 +81,6 @@ const Testfs = () => {
 
       function (error) {
         console.log("Error getting location", error);
-        console.log(error);
         alert(`Error (${error.code}) getting location.  ${error.message}.`);
         setNearby(false);
       }
@@ -84,22 +96,8 @@ const Testfs = () => {
     setLoading(false);
   };
 
-  // useEffect(() => {
-  //   //This should be moved to getStaticProps
-
-  //   const onceAtStartupFetchFastFoodStores = async () => {
-  //     setLoading(true);
-  //     const fetchedStores = await fetchFastFoodStores(latLong, "30");
-  //     console.log({ fetchedStores });
-  //     setStores(fetchedStores);
-  //     setLoading(false);
-  //   };
-
-  //   onceAtStartupFetchFastFoodStores();
-  // }, [latLong]);
-
   useEffect(() => {
-    console.log("useEffect stores:", stores);
+    dispatch(setFetchedStores(stores));
   }, [stores]);
 
   return (

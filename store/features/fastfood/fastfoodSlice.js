@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: null,
+  fetchedStores: null,
+  selectedStore: null,
 };
 
 export const fastfoodSlice = createSlice({
@@ -9,12 +10,15 @@ export const fastfoodSlice = createSlice({
   initialState,
   reducers: {
     setSelectedStore: (state, action) => {
-      state.value = action.payload;
+      state.selectedStore = action.payload;
+    },
+    setFetchedStores: (state, action) => {
+      state.fetchedStores = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setSelectedStore } = fastfoodSlice.actions;
+export const { setSelectedStore, setFetchedStores } = fastfoodSlice.actions;
 
 export default fastfoodSlice.reducer;

@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
 import { useSelector } from "react-redux";
+import fastFoodGenericPicture from "../../public/static/fastfood.jpg";
 
 // Import Swiper React components & styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,15 +11,54 @@ import "swiper/css";
 import "swiper/css/navigation";
 // import useSWR from "swr";
 
-const FastfoodStore = () => {
-  const selectedStore = useSelector((store) => store.fastfood.value);
+import { initialStores } from "../../foursquare/localData";
+import { fetchFastFoodStores } from "../../foursquare/foursquare";
+
+export async function getStaticProps(staticProps) {
+  const params = staticProps.params;
+
+  const storesByLocation = await fetchFastFoodStores();
+  const fastfoodStore = storesByLocation.find(
+    (store) => store.fsq_id === params.id
+  );
+  const fastfoodStoreInitialData = initialStores.find(
+    (store) => store.fsq_id === params.id
+  );
+  // console.log({ params });
+  return {
+    props: {
+      fastfoodStore: fastfoodStore ? fastfoodStore : fastfoodStoreInitialData,
+    },
+  };
+}
+
+export async function getStaticPaths() {
+  return {
+    paths: initialStores.map((store) => ({
+      params: { id: store.fsq_id },
+    })),
+    fallback: true,
+  };
+}
+
+const FastfoodStore = (props) => {
+  const selectedStore = useSelector((store) => store.fastfood.selectedStore);
   const router = useRouter();
   const id = router.query.id;
-  console.log("Ce-a ajuns aici? ", selectedStore);
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
+  //////// Check if the page is pre-rendered. If it's not, maybe I should render the page ////////
+  if (Object.keys(props.fastfoodStore).length === 0) {
+    return <div>No data to LOAD. Loading and loading...</div>;
+  }
+
   return (
     <div className="bg-red-500">
       <div className="w-96 h-72 flex justify-center items-center">
-        {selectedStore.photos.length > 0 ? (
+        {props.fastfoodStore.photos.length > 0 ? (
           <Swiper
             className="bg-gray-500 h-full w-full"
             modules={[Navigation]}
@@ -27,7 +66,7 @@ const FastfoodStore = () => {
             slidesPerView={1}
             navigation
           >
-            {selectedStore.photos.map((photo, idx) => (
+            {props.fastfoodStore.photos.map((photo, idx) => (
               <SwiperSlide key={idx}>
                 <Image
                   priority
@@ -61,16 +100,16 @@ const FastfoodStore = () => {
         )}
       </div>
       <h1 className="text-3xl underline underline-offset-8 pb-4">
-        {selectedStore.name}
+        {props.fastfoodStore.name}
       </h1>
 
       <h2 className="text-2xl">
         Categories:{" "}
         <span>
-          {selectedStore.categories.map((category, idx) => {
+          {props.fastfoodStore.categories.map((category, idx) => {
             return (
               category.name +
-              (idx < selectedStore.categories.length - 1 ? ", " : "")
+              (idx < props.fastfoodStore.categories.length - 1 ? ", " : "")
             );
           })}
         </span>
@@ -79,9 +118,9 @@ const FastfoodStore = () => {
       <h3 className="text-xl ">
         Address:{" "}
         <span>
-          {selectedStore.location.formatted_address +
+          {props.fastfoodStore.location.formatted_address +
             ", " +
-            selectedStore.location.country}
+            props.fastfoodStore.location.country}
         </span>
       </h3>
     </div>

@@ -44,6 +44,9 @@ const Login = () => {
       } else {
         try {
           const createdAt = new Date();
+          if (!user.displayName) {
+            user.displayName = user.email.split("@")[0];
+          }
           // doc.data() will be undefined in this case
           console.log("No such document! I will create one!");
           await setDoc(docRef, {
