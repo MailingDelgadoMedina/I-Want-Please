@@ -1,3 +1,5 @@
+import { ingredients } from "./ingredientsList.js";
+
 export const recipesAdvancedSearchFields = [
   {
     cuisine: {
@@ -115,12 +117,12 @@ export const recipesAdvancedSearchFields = [
       info: 'The equipment required. Multiple values will be interpreted as "OR"',
       combine: "csv",
       default: "blender,frying pan,bowl",
-      hidden: false,
+      hidden: true,
     },
   },
   {
     includeIngredients: {
-      values: [""],
+      values: ingredients,
       info: 'The ingredients that must be included in the recipes. Multiple values will be interpreted as "AND"',
       combine: "csv",
       default: "tomato,cheese",
@@ -129,11 +131,11 @@ export const recipesAdvancedSearchFields = [
   },
   {
     excludeIngredients: {
-      values: [""],
+      values: ingredients,
       info: 'The ingredients that must not be included in the recipes. Multiple values will be interpreted as "AND"',
       combine: "csv",
       default: "eggs",
-      hidden: false,
+      hidden: true,
     },
   },
   {
