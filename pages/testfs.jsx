@@ -7,14 +7,21 @@ import {
   setFetchedStores,
   setSelectedStore,
 } from "../store/features/fastfood/fastfoodSlice";
+import { useSelector } from "react-redux";
+import { setLatLong } from "../store/features/latLong/latLongSlice";
 
 import { useRouter } from "next/router";
+import { fetchFastFoodStores } from "../foursquare/foursquare";
 
 ////// Server Side Code //////
 export async function getStaticProps(context) {
+  const storesByLocation = await fetchFastFoodStores(
+    "40.748627838930304,-73.98528717577388",
+    "30" //Starting location: NYC
+  );
   return {
     props: {
-      fastfoodStores: initialStores,
+      fastfoodStores: storesByLocation,
     }, // will be passed to the page component as props
   };
 }
@@ -59,9 +66,10 @@ const Testfs = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [stores, setStores] = useState(props.fastfoodStores);
-  const [latLong, setLatLong] = useState(
-    "40.71266484705233,-74.00646731123601"
-  );
+  // const [latLong, setLatLong] = useState(
+  //   "40.71266484705233,-74.00646731123601"
+  // );
+  const latLong = useSelector((state) => state.latLong.latLong);
   const [nearby, setNearby] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -71,18 +79,20 @@ const Testfs = (props) => {
   };
 
   //get location data from browser
-  const getLocationAndFetchStores = () => {
+  const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       function (position) {
-        setLatLong(`${position.coords.latitude},${position.coords.longitude}`);
-        setNearby(true);
-        fetchNearbyStores();
+        dispatch(
+          setLatLong(`${position.coords.latitude},${position.coords.longitude}`)
+        );
+        // setNearby(true);
+        // fetchNearbyStores();
       },
 
       function (error) {
         console.log("Error getting location", error);
         alert(`Error (${error.code}) getting location.  ${error.message}.`);
-        setNearby(false);
+        // setNearby(false);
       }
     );
   };
@@ -90,14 +100,27 @@ const Testfs = (props) => {
   const fetchNearbyStores = async () => {
     setLoading(true);
     // const fetchedStores = await fetchFastFoodStores(latLong, "30");
-    const fetchedStores = await fetch("/api/getFastFoodStoresByLocation");
+    const fetchedStores = await fetch(
+      `/api/getFastFoodStoresByLocation?latLong=${latLong}&limit=15`
+    );
     const response = await fetchedStores.json();
     setStores(response);
+    setNearby(true);
     setLoading(false);
   };
 
   useEffect(() => {
-    dispatch(setFetchedStores(stores));
+    if (latLong) {
+      fetchNearbyStores(latLong);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latLong]);
+
+  useEffect(() => {
+    if (stores) {
+      dispatch(setFetchedStores(stores));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stores]);
 
   return (
@@ -105,7 +128,7 @@ const Testfs = (props) => {
       <h1 className="text-center mt-10 text-2xl">I Want Please</h1>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4 w-60"
-        onClick={getLocationAndFetchStores}
+        onClick={getLocation}
       >
         {loading ? "Loading..." : "View FastFoods nearby"}
       </button>

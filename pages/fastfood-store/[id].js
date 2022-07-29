@@ -12,118 +12,155 @@ import "swiper/css/navigation";
 // import useSWR from "swr";
 
 import { initialStores } from "../../foursquare/localData";
-import { fetchFastFoodStores } from "../../foursquare/foursquare";
+import {
+  fetchFastFoodStores,
+  fetchOneFastFoodStore,
+} from "../../foursquare/foursquare";
+import { useEffect, useState } from "react";
 
 export async function getStaticProps(staticProps) {
+  console.log("staticProps", staticProps);
   const params = staticProps.params;
 
   const storesByLocation = await fetchFastFoodStores();
-  const fastfoodStore = storesByLocation.find(
+  const findFastfoodStoreById = storesByLocation.find(
     (store) => store.fsq_id === params.id
   );
-  const fastfoodStoreInitialData = initialStores.find(
-    (store) => store.fsq_id === params.id
-  );
-  // console.log({ params });
+  console.log("findFastfoodStoreById", findFastfoodStoreById);
+
   return {
     props: {
-      fastfoodStore: fastfoodStore ? fastfoodStore : fastfoodStoreInitialData,
+      fastfoodStore: findFastfoodStoreById ? findFastfoodStoreById : {},
     },
   };
 }
 
 export async function getStaticPaths() {
+  const storesByLocation = await fetchFastFoodStores();
   return {
-    paths: initialStores.map((store) => ({
+    paths: storesByLocation.map((store) => ({
       params: { id: store.fsq_id },
     })),
     fallback: true,
   };
 }
 
-const FastfoodStore = (props) => {
-  const selectedStore = useSelector((store) => store.fastfood.selectedStore);
+const FastfoodStore = (initialProps) => {
+  console.log("initialProps=", initialProps);
   const router = useRouter();
   const id = router.query.id;
+  const [fastfoodStore, setFastfoodStore] = useState(
+    initialProps.fastfoodStore || {}
+  );
+  const selectedStore = useSelector((store) => store.fastfood.selectedStore);
+
+  // useEffect(() => {
+  //   if (Object.keys(initialProps.fastfoodStore).length === 0) {
+  //     if (fastfoodStore.length > 0) {
+  //       const findFastfoodStoreById = storesByLocation.find(
+  //         (store) => store.fsq_id === params.id
+  //       );
+  //       setFastfoodStore(findFastfoodStoreById);
+  //     }
+  //   } else {
+  //     console.log("SSG");
+  //   }
+  // }, [fastfoodStore, initialProps.fastfoodStore]);
 
   if (router.isFallback) {
     return <div>Loading...</div>;
   }
 
   //////// Check if the page is pre-rendered. If it's not, maybe I should render the page ////////
-  if (Object.keys(props.fastfoodStore).length === 0) {
-    return <div>No data to LOAD. Loading and loading...</div>;
-  }
+  // if (Object.keys(props.fastfoodStore).length === 0) {
+  //   return <div>No data to LOAD. Loading and loading...</div>;
+  // }
+
+  const data = fetchOneFastFoodStore(id);
 
   return (
-    <div className="bg-red-500">
-      <div className="w-96 h-72 flex justify-center items-center">
-        {props.fastfoodStore.photos.length > 0 ? (
-          <Swiper
-            className="bg-gray-500 h-full w-full"
-            modules={[Navigation]}
-            spaceBetween={50}
-            slidesPerView={1}
-            navigation
-          >
-            {props.fastfoodStore.photos.map((photo, idx) => (
-              <SwiperSlide key={idx}>
-                <Image
-                  priority
-                  alt="fast-food store"
-                  src={photo}
-                  layout="responsive"
-                  width={400}
-                  height={400}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <Swiper
-            className="bg-gray-500 h-full w-full"
-            modules={[Navigation]}
-            spaceBetween={50}
-            slidesPerView={1}
-            navigation
-          >
-            <SwiperSlide>
-              <Image
-                alt="fast-food store"
-                src={fastFoodGenericPicture}
-                layout="responsive"
-                width={400}
-                height={400}
-              />
-            </SwiperSlide>
-          </Swiper>
-        )}
-      </div>
-      <h1 className="text-3xl underline underline-offset-8 pb-4">
-        {props.fastfoodStore.name}
-      </h1>
-
-      <h2 className="text-2xl">
-        Categories:{" "}
-        <span>
-          {props.fastfoodStore.categories.map((category, idx) => {
-            return (
-              category.name +
-              (idx < props.fastfoodStore.categories.length - 1 ? ", " : "")
-            );
-          })}
-        </span>
-      </h2>
-
-      <h3 className="text-xl ">
-        Address:{" "}
-        <span>
-          {props.fastfoodStore.location.formatted_address +
-            ", " +
-            props.fastfoodStore.location.country}
-        </span>
-      </h3>
+    <div className="text-center text-5xl">
+      <a
+        onClick={() => {
+          router.back();
+        }}
+        className="text-5xl text-center cursor-pointer"
+      >
+        Go back!
+      </a>
+      <br />
+      Is working!
+      <br />
+      <span className="text-3xl">ID is: {id}</span>
     </div>
+    // <div className="bg-red-500">
+    //   <div className="w-96 h-72 flex justify-center items-center">
+    //     {fastfoodStore?.photos?.length > 0 ? (
+    //       <Swiper
+    //         className="bg-gray-500 h-full w-full"
+    //         modules={[Navigation]}
+    //         spaceBetween={50}
+    //         slidesPerView={1}
+    //         navigation
+    //       >
+    //         {fastfoodStore.photos.map((photo, idx) => (
+    //           <SwiperSlide key={idx}>
+    //             <Image
+    //               priority
+    //               alt="fast-food store"
+    //               src={photo}
+    //               layout="responsive"
+    //               width={400}
+    //               height={400}
+    //             />
+    //           </SwiperSlide>
+    //         ))}
+    //       </Swiper>
+    //     ) : (
+    //       <Swiper
+    //         className="bg-gray-500 h-full w-full"
+    //         modules={[Navigation]}
+    //         spaceBetween={50}
+    //         slidesPerView={1}
+    //         navigation
+    //       >
+    //         <SwiperSlide>
+    //           <Image
+    //             alt="fast-food store"
+    //             src={fastFoodGenericPicture}
+    //             layout="responsive"
+    //             width={400}
+    //             height={400}
+    //           />
+    //         </SwiperSlide>
+    //       </Swiper>
+    //     )}
+    //   </div>
+    //   <h1 className="text-3xl underline underline-offset-8 pb-4">
+    //     {fastfoodStore.name}
+    //   </h1>
+
+    //   <h2 className="text-2xl">
+    //     Categories:{" "}
+    //     <span>
+    //       {fastfoodStore.categories.map((category, idx) => {
+    //         return (
+    //           category.name +
+    //           (idx < fastfoodStore.categories.length - 1 ? ", " : "")
+    //         );
+    //       })}
+    //     </span>
+    //   </h2>
+
+    //   <h3 className="text-xl ">
+    //     Address:{" "}
+    //     <span>
+    //       {fastfoodStore.location.formatted_address +
+    //         ", " +
+    //         fastfoodStore.location.country}
+    //     </span>
+    //   </h3>
+    // </div>
   );
 };
 
