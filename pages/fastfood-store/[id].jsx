@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import fastFoodGenericPicture from "../../public/static/fastfood.jpg";
 
+import useSWR from "swr";
+
 // Import Swiper React components & styles
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
@@ -23,6 +25,7 @@ export async function getStaticProps(staticProps) {
   const params = staticProps.params;
 
   const storesByLocation = await fetchFastFoodStores();
+  // console.log("storesByLocation", storesByLocation);
   const findFastfoodStoreById = storesByLocation.find(
     (store) => store.fsq_id === params.id
   );
@@ -46,6 +49,7 @@ export async function getStaticPaths() {
 }
 
 const FastfoodStore = (initialProps) => {
+  // initialProps are from getStaticProps
   console.log("initialProps=", initialProps);
   const router = useRouter();
   const id = router.query.id;
@@ -53,19 +57,40 @@ const FastfoodStore = (initialProps) => {
     initialProps.fastfoodStore || {}
   );
   const selectedStore = useSelector((store) => store.fastfood.selectedStore);
+  const fastfoodStores = useSelector((store) => store.fastfood.fetchedStores);
 
+  useEffect(() => {
+    console.log("Looks like I am running...");
+    // if (Object.keys(initialProps.fastfoodStore).length === 0) {
+    //   if (fastfoodStores.length > 0) {
+    //     const findFastfoodStoreById = fastfoodStores.find(
+    //       (store) => store.fsq_id === params.id
+    //     );
+    //     setFastfoodStore(findFastfoodStoreById);
+    //   }
+    // } else {
+    //   console.log("SSG");
+    // }
+  }, []);
+
+  const fetcher = async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  };
+
+  // const { data, error } = useSWR(
+  //   `
+  //   /api/getFastFoodStoreById?id=${id}
+  // `,
+  //   fetcher
+  // );
   // useEffect(() => {
-  //   if (Object.keys(initialProps.fastfoodStore).length === 0) {
-  //     if (fastfoodStore.length > 0) {
-  //       const findFastfoodStoreById = storesByLocation.find(
-  //         (store) => store.fsq_id === params.id
-  //       );
-  //       setFastfoodStore(findFastfoodStoreById);
-  //     }
-  //   } else {
-  //     console.log("SSG");
+  //   if (data && data.length > 0) {
+  //     setFastfoodStore(data);
+  //     console.log(() => "Dataaaa maaa:", data);
   //   }
-  // }, [fastfoodStore, initialProps.fastfoodStore]);
+  // }, [data]);
 
   if (router.isFallback) {
     return <div>Loading...</div>;
@@ -75,8 +100,6 @@ const FastfoodStore = (initialProps) => {
   // if (Object.keys(props.fastfoodStore).length === 0) {
   //   return <div>No data to LOAD. Loading and loading...</div>;
   // }
-
-  const data = fetchOneFastFoodStore(id);
 
   return (
     <div className="text-center text-5xl">

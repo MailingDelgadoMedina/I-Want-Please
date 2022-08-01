@@ -65,8 +65,8 @@ const fetchOneFastFoodStore = async (fsq_id = "4ddf7c1ae4cde756db33f4e3") => {
 
 //THE QUERY for getting the stores near a location and for every store make another query for photos.
 const fetchFastFoodStores = async (
-  latLong = "44.435510050459264,26.102560366909422",
-  limit = "6"
+  latLong = "40.748627838930304,-73.98528717577388",
+  limit = "30"
 ) => {
   try {
     const response = await fetch(
