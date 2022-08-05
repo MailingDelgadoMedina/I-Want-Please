@@ -13,7 +13,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
 import Link from "next/link";
 
-import { setUserGlobal } from "../store/features/user/userSlice";
+import { setUserGlobal } from "../redux/features/user/userSlice";
 import { useDispatch } from "react-redux";
 import { async } from "@firebase/util";
 
@@ -28,19 +28,13 @@ const Login = () => {
   const [myMessage, setMessage] = useState("");
   const router = useRouter();
 
-  const theData = async () => {
-    //   const querySnapshot = await getDocs(collection(db, "users"));
-    //   console.log("querySnapshot is: ", querySnapshot);
-    //   querySnapshot.forEach((doc) => {
-    //     console.log("doc.data() is: ", doc.data());
-    //     console.log(`${doc.id} => ${doc.data().uid}`);
-    //   });
+  const checkUserInDatabase = async () => {
     if (user) {
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
+        console.log("This user exists. Welcome back!");
       } else {
         try {
           const createdAt = new Date();
@@ -62,20 +56,17 @@ const Login = () => {
   };
 
   useEffect(() => {
-    //Retrieve user in database or create it if uid is not found
-
-    theData();
-  }, [user]);
-
-  useEffect(() => {
+    // dispatch logged in user to redux store
     if (user) {
       const { uid, displayName, email, photoURL } = user;
       router.push("/");
       dispatch(setUserGlobal({ uid, displayName, email, photoURL }));
-      // Check if user is in database and create if not
+      // Check if logged in user is in database and create if not
+      checkUserInDatabase();
     } else {
       dispatch(setUserGlobal(null));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   //Google Login

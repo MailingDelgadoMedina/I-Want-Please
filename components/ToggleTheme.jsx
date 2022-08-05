@@ -1,7 +1,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleTheme } from "../store/features/theme/themeSlice";
+import { toggleTheme } from "../redux/features/theme/themeSlice";
 
 export const ToggleTheme = () => {
   const [mounted, setMounted] = useState(false);

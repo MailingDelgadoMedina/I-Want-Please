@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  fetchedStores: null,
-  selectedStore: null,
+  fetchedStores: {},
+  selectedStore: {},
 };
 
 export const fastfoodSlice = createSlice({

@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import fastFoodGenericPicture from "../public/static/fastfood.jpg";
-import { initialStores } from "../foursquare/localData";
+import { useRouter } from "next/router";
+
 import { useDispatch } from "react-redux";
 import {
   setFetchedStores,
   setSelectedStore,
-} from "../store/features/fastfood/fastfoodSlice";
+} from "../redux/features/fastfood/fastfoodSlice";
 import { useSelector } from "react-redux";
-import { setLatLong } from "../store/features/latLong/latLongSlice";
+import { setLatLong } from "../redux/features/latLong/latLongSlice";
 
-import { useRouter } from "next/router";
 import { fetchFastFoodStores } from "../foursquare/foursquare";
+import fastFoodGenericPicture from "../public/static/fastfood.jpg";
 
-////// Server Side Code //////
 export async function getStaticProps(context) {
   const storesByLocation = await fetchFastFoodStores(
     "40.748627838930304,-73.98528717577388",
@@ -65,10 +64,8 @@ const Card = ({ store, clickToOpenStorePage }) => {
 const Testfs = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [stores, setStores] = useState(props.fastfoodStores);
-  // const [latLong, setLatLong] = useState(
-  //   "40.71266484705233,-74.00646731123601"
-  // );
+
+  const stores = useSelector((state) => state.fastfood.fetchedStores);
   const latLong = useSelector((state) => state.latLong.latLong);
   const [nearby, setNearby] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -82,11 +79,11 @@ const Testfs = (props) => {
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       function (position) {
-        dispatch(
-          setLatLong(`${position.coords.latitude},${position.coords.longitude}`)
-        );
-        // setNearby(true);
-        // fetchNearbyStores();
+        const actualPosition = `${position.coords.latitude},${position.coords.longitude}`;
+        dispatch(setLatLong(actualPosition));
+
+        setNearby(true);
+        fetchNearbyStores(actualPosition);
       },
 
       function (error) {
@@ -99,29 +96,25 @@ const Testfs = (props) => {
 
   const fetchNearbyStores = async () => {
     setLoading(true);
-    // const fetchedStores = await fetchFastFoodStores(latLong, "30");
     const fetchedStores = await fetch(
       `/api/getFastFoodStoresByLocation?latLong=${latLong}&limit=15`
     );
     const response = await fetchedStores.json();
-    setStores(response);
+    dispatch(setFetchedStores(response));
     setNearby(true);
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (latLong) {
-      fetchNearbyStores(latLong);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [latLong]);
+  // useEffect(() => {
+  //   if (latLong) {
+  //     fetchNearbyStores(latLong);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [latLong]);
 
   useEffect(() => {
-    if (stores) {
-      dispatch(setFetchedStores(stores));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stores]);
+    dispatch(setFetchedStores(props.fastfoodStores));
+  }, []);
 
   return (
     <div className="bg-white dark:bg-gray-800 dark:text-white relative flex flex-col items-center">
@@ -136,15 +129,17 @@ const Testfs = (props) => {
         nearby ? "Nearby" : "New York"
       } FastFood Stores`}</h2>
       <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {stores.map((store, idx) => {
-          return (
-            <Card
-              key={idx}
-              store={store}
-              clickToOpenStorePage={clickToOpenStorePage}
-            />
-          );
-        })}
+        {stores &&
+          stores.length > 0 &&
+          stores.map((store, idx) => {
+            return (
+              <Card
+                key={idx}
+                store={store}
+                clickToOpenStorePage={clickToOpenStorePage}
+              />
+            );
+          })}
       </div>
     </div>
   );

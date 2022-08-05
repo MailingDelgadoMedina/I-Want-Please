@@ -76,7 +76,7 @@ const fetchFastFoodStores = async (
 
     const data = await response.json(); //fetched stores withouth photos
 
-    const promises = data.results.map(async (store, idx) => {
+    const promises = await data.results.map(async (store, idx) => {
       const storePhoto = await fetchFastFoodPhoto(store.fsq_id);
       return { ...store, photos: storePhoto };
     });
