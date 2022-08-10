@@ -1,4 +1,4 @@
-import { fetchFastFoodStores } from "../../foursquare/foursquare";
+import { fetchFastFoodStores } from "../../lib/foursquare";
 
 const getFastFoodStoresByLocation = async (req, res) => {
   try {

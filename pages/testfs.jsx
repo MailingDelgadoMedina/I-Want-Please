@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import FastFoodCard from "../components/FastFoodCard";
 import { useRouter } from "next/router";
 
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   setFetchedStores,
   setSelectedStore,
 } from "../redux/features/fastfood/fastfoodSlice";
-import { useSelector } from "react-redux";
 import { setLatLong } from "../redux/features/latLong/latLongSlice";
 
-import { fetchFastFoodStores } from "../foursquare/foursquare";
-import fastFoodGenericPicture from "../public/static/fastfood.jpg";
+import { fetchFastFoodStores } from "../lib/foursquare";
 
 export async function getStaticProps(context) {
   const storesByLocation = await fetchFastFoodStores(
@@ -26,40 +24,6 @@ export async function getStaticProps(context) {
 }
 
 ////// Client Side Code //////
-const Card = ({ store, clickToOpenStorePage }) => {
-  const storeLocation = `${
-    store.location.formatted_address.length > 0
-      ? store.location.formatted_address + ", "
-      : ""
-  }${store.location.country}`;
-  return (
-    <div className="overflow-hidden p-2 flex flex-col m-2 h-48 w-64 bg-gray-200 dark:bg-slate-700 justify-between border-2 border-gray-400 dark:border-black shadow-sm shadow-gray-400/50 hover:scale-105 transition-all duration-300">
-      <div
-        className="h-full w-full text-center hover:cursor-pointer"
-        onClick={(e) => {
-          clickToOpenStorePage(store);
-        }}
-      >
-        <Image
-          src={
-            store.photos.length > 0 ? store.photos[0] : fastFoodGenericPicture
-          }
-          alt={`Photo of ${store.name}`}
-          layout="responsive"
-          width={200}
-          height={90}
-          sizes="50vw"
-          className="object-cover"
-        />
-      </div>
-
-      <h1 className="mt-2 text-center ">{store.name}</h1>
-      <p className="text-center mb-2">
-        Address: <span>{storeLocation}</span>
-      </p>
-    </div>
-  );
-};
 
 const Testfs = (props) => {
   const dispatch = useDispatch();
@@ -70,11 +34,6 @@ const Testfs = (props) => {
   const [nearby, setNearby] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const clickToOpenStorePage = (store) => {
-    dispatch(setSelectedStore(store));
-    router.push(`/fastfood-store/${store.fsq_id}`);
-  };
-
   //get location data from browser
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
@@ -83,6 +42,7 @@ const Testfs = (props) => {
         dispatch(setLatLong(actualPosition));
 
         setNearby(true);
+        console.log("LatLong aquired!", actualPosition);
         fetchNearbyStores(actualPosition);
       },
 
@@ -94,7 +54,7 @@ const Testfs = (props) => {
     );
   };
 
-  const fetchNearbyStores = async () => {
+  const fetchNearbyStores = async (latLong) => {
     setLoading(true);
     const fetchedStores = await fetch(
       `/api/getFastFoodStoresByLocation?latLong=${latLong}&limit=15`
@@ -105,15 +65,13 @@ const Testfs = (props) => {
     setLoading(false);
   };
 
-  // useEffect(() => {
-  //   if (latLong) {
-  //     fetchNearbyStores(latLong);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [latLong]);
-
   useEffect(() => {
-    dispatch(setFetchedStores(props.fastfoodStores));
+    // If there are no stores in redux, get them from initial props
+    if (stores.length > 0) {
+      //We have some stores in redux. Nothing to do.
+    } else {
+      dispatch(setFetchedStores(props.fastfoodStores));
+    }
   }, []);
 
   return (
@@ -132,13 +90,7 @@ const Testfs = (props) => {
         {stores &&
           stores.length > 0 &&
           stores.map((store, idx) => {
-            return (
-              <Card
-                key={idx}
-                store={store}
-                clickToOpenStorePage={clickToOpenStorePage}
-              />
-            );
+            return <FastFoodCard key={idx} store={store} />;
           })}
       </div>
     </div>

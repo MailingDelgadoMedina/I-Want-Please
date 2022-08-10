@@ -15,9 +15,9 @@ import "swiper/css/navigation";
 import {
   fetchFastFoodStores,
   fetchOneFastFoodStore,
-} from "../../foursquare/foursquare";
+} from "../../lib/foursquare";
 import { useEffect, useState } from "react";
-import { db } from "../../firebase/config";
+import { db } from "../../lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export async function getStaticProps(staticProps) {
@@ -64,6 +64,7 @@ export async function getStaticPaths() {
 }
 
 const FastfoodStore = (initialProps) => {
+  const [voting, setVoting] = useState(false);
   const router = useRouter();
   const id = router.query.id;
   const [fastfoodStore, setFastfoodStore] = useState(
@@ -76,25 +77,37 @@ const FastfoodStore = (initialProps) => {
     (store) => store.fastfood.fetchedStores || {}
   );
 
-  ////Do I need this?!
+  const handleUpvote = async (id) => {
+    await fetch(`/api/upvoteFastFoodStore?id=${id}`);
+  };
+
   // useEffect(() => {
-  //   //Check if initialProps exists and if is empty
-  //   if (
-  //     initialProps.fastfoodStore &&
-  //     Object.keys(initialProps.fastfoodStore).length === 0
-  //   ) {
-  //     //Check if the fastfoodStores state exists
-  //     if (fastfoodStores.length > 0) {
-  //       const findFastfoodStoreById = fastfoodStores.find(
-  //         (store) => store.fsq_id === params.id
-  //       );
-  //       setFastfoodStore(findFastfoodStoreById);
-  //     }
-  //   } else {
-  //     //Check if the id is ok and fetch the store
-  //     console.log("SSG");
+  //   console.log("Voting este acum: ", voting);
+  //   if (voting) {
+  //     // handleUpvote(id);
+  //     router.replace(router.asPath);
+  //     setVoting(false);
   //   }
-  // }, [fastfoodStores, initialProps.fastfoodStore]);
+  // }, [voting]);
+
+  useEffect(() => {
+    //Check if initialProps exists and if is empty
+    if (
+      initialProps.fastfoodStore &&
+      Object.keys(initialProps.fastfoodStore).length === 0
+    ) {
+      //Check if the fastfoodStores state exists
+      if (fastfoodStores.length > 0) {
+        const findFastfoodStoreById = fastfoodStores.find(
+          (store) => store.fsq_id === params.id
+        );
+        setFastfoodStore(findFastfoodStoreById);
+      }
+    } else {
+      //Check if the id is ok and fetch the store
+      console.log("SSG");
+    }
+  }, [id, fastfoodStores, initialProps.fastfoodStore]);
 
   const fetcher = async (url) => {
     const response = await fetch(url);
@@ -110,11 +123,10 @@ const FastfoodStore = (initialProps) => {
 
   useEffect(() => {
     if (data && data !== 0) {
-      console.log("I am running???");
-      console.log("data noua este aici: ", data);
+      console.log("Votes for this fastfood store are: ", data);
       setVotes(data);
     }
-  }, [data]);
+  }, [data, voting]);
 
   const [photos, setPhotos] = useState([fastFoodGenericPicture]);
 
@@ -130,10 +142,14 @@ const FastfoodStore = (initialProps) => {
     return <div>Loading...</div>;
   }
 
+  if (voting) {
+    return <div>Voting...</div>;
+  }
+
   return (
     <div className="bg-gray-700 flex flex-col items-center">
       <Link href="/testfs">
-        <a className="text-5xl text-center cursor-pointer">← Back to home</a>
+        <a className="text-5xl text-center cursor-pointer">← Go Back</a>
       </Link>
       <div className="w-96 h-72 flex justify-center items-center">
         {fastfoodStore && fastfoodStore.photos.length > 0 ? (
@@ -181,9 +197,23 @@ const FastfoodStore = (initialProps) => {
         {fastfoodStore.name}
       </h1>
 
-      <h1 className="text-3xl">
-        ⭐ <span className="text-2xl">{votes}</span>
-      </h1>
+      <div className="flex">
+        <h1 className="text-3xl">
+          ⭐ <span className="text-2xl mr-10">{votes}</span>
+        </h1>
+        <button
+          className="text-2xl"
+          onClick={(e) => {
+            // e.preventDefault;
+            handleUpvote(id);
+            router.replace(router.asPath);
+            // router.reload();
+            // setVoting(true);
+          }}
+        >
+          Like!
+        </button>
+      </div>
 
       <h2 className="text-2xl">
         Categories:{" "}

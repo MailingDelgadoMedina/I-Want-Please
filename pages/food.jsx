@@ -6,124 +6,19 @@ import { ChevronDoubleDownIcon } from "@heroicons/react/outline";
 import { recipesAdvancedSearchFields } from "../utils/recipesAdvancedSearchFields";
 import Link from "next/link";
 
-const gred =
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80";
+import RecipeCard from "../components/RecipeCard";
 
-const defaultRecipes = {
-  results: [
-    {
-      id: 749013,
-      title: "Pasta",
-      image: "https://spoonacular.com/recipeImages/749013-312x231.jpeg",
-      imageType: "jpeg",
-    },
-    {
-      id: 358073,
-      title: "Pasta",
-      image: "https://spoonacular.com/recipeImages/358073-312x231.jpeg",
-      imageType: "jpeg",
-    },
-    {
-      id: 450759,
-      title: "Pasta Pie",
-      image: "https://spoonacular.com/recipeImages/450759-312x231.jpg",
-      imageType: "jpg",
-    },
-    {
-      id: 376941,
-      title: "Pasta Rosa",
-      image: "https://spoonacular.com/recipeImages/376941-312x231.jpeg",
-      imageType: "jpeg",
-    },
-    {
-      id: 532245,
-      title: "Pasta Bake",
-      image: "https://spoonacular.com/recipeImages/532245-312x231.jpg",
-      imageType: "jpg",
-    },
-    {
-      id: 602638,
-      title: "Pasta Nest",
-      image: "https://spoonacular.com/recipeImages/602638-312x231.jpg",
-      imageType: "jpg",
-    },
-    {
-      id: 603414,
-      title: "Pasta Mama",
-      image: "https://spoonacular.com/recipeImages/603414-312x231.jpg",
-      imageType: "jpg",
-    },
-    {
-      id: 487873,
-      title: "Pasta Salad",
-      image: "https://spoonacular.com/recipeImages/487873-312x231.jpg",
-      imageType: "jpg",
-    },
-    {
-      id: 377153,
-      title: "Pasta Ponza",
-      image: "https://spoonacular.com/recipeImages/377153-312x231.jpeg",
-      imageType: "jpeg",
-    },
-    {
-      id: 379582,
-      title: "Pasta Salad",
-      image: "https://spoonacular.com/recipeImages/379582-312x231.jpeg",
-      imageType: "jpeg",
-    },
-  ],
-  offset: 0,
-  number: 10,
-  totalResults: 8202,
-};
+import { advancedSearchForRecipes } from "../lib/spoonacular";
 
-const options = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY,
-    "X-RapidAPI-Host": process.env.NEXT_PUBLIC_RAPIDAPI_HOST,
-  },
-};
-
-const getRecipeDetails = async (id) => {
-  const result = await fetch(
-    `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`,
-    options
-  );
-  const data = await result.json();
-  console.log(data);
-};
-
-const Card = ({ recipe }) => {
-  return (
-    <div
-      className="bg-gray-200 dark:bg-gray-700 p-2 m-2 w-56 hover:cursor-pointer dark:text-gray-200 hover:scale-105 transition-all duration-300"
-      onClick={() => {
-        getRecipeDetails(recipe.id);
-        // window.location.href = `/recipe/${recipe.id}`;
-      }}
-    >
-      <Image
-        alt="food picture"
-        src={recipe.image}
-        width={300}
-        height={300}
-        layout="responsive"
-        className="object-cover rounded-md"
-      />
-      <div className="flex flex-col justify-center items-center">
-        <h3 className="text-xl">{recipe.title}</h3>
-        <p>{`ID is: ${recipe.id}`}</p>
-      </div>
-    </div>
-  );
-};
+import { useSelector, useDispatch } from "react-redux";
+import { setRecipes } from "../redux/features/recipes/recipeSlice";
 
 const Food = () => {
-  const [recipes, setRecipes] = useState(defaultRecipes);
+  const dispatch = useDispatch();
+  const recipes = useSelector((state) => state.recipes.recipes);
   const searchRef = useRef("");
   const [advancedSearch, setAdvancedSearch] = useState(false);
-  const [submenu, setSubmenu] = useState(false);
+  // const [submenu, setSubmenu] = useState(false);
   const [advancedSearchQuery, setAdvancedSearchQuery] = useState({
     cuisine: "",
     excludeCuisine: "",
@@ -132,18 +27,16 @@ const Food = () => {
     includeIngredients: "",
   });
 
-  const advancedSearchForRecipes = async (
-    query = "fish",
-    stringToSearch = transformAdvancedSearchQuery()
-  ) => {
-    const result = await fetch(
-      `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/complexSearch?query=${query}${stringToSearch}`,
-      options
-    );
-    const data = await result.json();
-    return data;
-  };
+  useEffect(() => {
+    console.log("🔍 advancedSearchQuery is..... ", advancedSearchQuery);
+  }),
+    [advancedSearchQuery];
 
+  useEffect(() => {
+    console.log("🔍 recipes.results is..... ", recipes);
+    console.log("2 recipes.results is..... ", recipes.results);
+  }),
+    [recipes];
   // Function to transform advancedSearchQuery to a string
   const transformAdvancedSearchQuery = () => {
     let query = "";
@@ -154,30 +47,6 @@ const Food = () => {
     }
     return query;
   };
-  // Search for bulk recipes by ID
-  // useEffect(() => {
-  //   fetch(
-  //     "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/informationBulk?ids=749013%2C358073%2C450759",
-  //     options
-  //   )
-  //     .then((response) => response.json())
-  //     .then((response) => console.log("Bulk", response))
-  //     .catch((err) => console.error(err));
-  // }),
-  //   [];
-
-  useEffect(() => {
-    const id = "749013";
-    fetch(
-      `https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`,
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => console.log("JustOne", response))
-      .catch((err) => console.error(err));
-  }),
-    [];
-
   return (
     <div className="flex flex-col justify-center items-center py-2">
       <section className="m-4 p-6 max-w-[950px] mx-auto sm:w-4/6 bg-white rounded-md shadow-md dark:bg-gray-800">
@@ -320,9 +189,11 @@ const Food = () => {
               onClick={(e) => {
                 e.preventDefault();
                 const query = searchRef.current.value;
-                advancedSearchForRecipes(query).then((data) => {
+                console.log("🍔 query is: ", query);
+                const stringToSearch = transformAdvancedSearchQuery();
+                advancedSearchForRecipes(query, stringToSearch).then((data) => {
                   console.log("Data from advancedSearchForRecipes", data);
-                  setRecipes(data);
+                  dispatch(setRecipes(data));
                   searchRef.current.value = "";
                 });
               }}
@@ -337,11 +208,11 @@ const Food = () => {
       <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {recipes ? (
           recipes.results.map((recipe, idx) => {
-            console.log({ recipe });
-            return <Card key={idx} recipe={recipe} />;
+            // console.log({ recipe });
+            return <RecipeCard key={idx} recipe={recipe} />;
           })
         ) : (
-          <p>No recipes found</p>
+          <p className="text-center">No recipes found</p>
         )}
       </div>
     </div>

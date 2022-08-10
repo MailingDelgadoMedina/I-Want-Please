@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTheme } from "next-themes";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase/config";
+import { auth } from "../lib/firebase";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 import { ToggleTheme } from "./ToggleTheme";

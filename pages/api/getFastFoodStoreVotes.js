@@ -1,5 +1,5 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase/config";
+import { db } from "../../lib/firebase";
 
 const getFastFoodStoreVotes = async (req, res) => {
   const { id } = req.query;
