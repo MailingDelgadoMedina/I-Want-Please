@@ -62,6 +62,7 @@ function Navbar() {
           // Mobile Menu open: "block", Menu closed: "hidden"
         }
         <div
+          onClick={() => setMenu(false)}
           className={`rounded flex flex-col mt-2 -mx-2 lg:mt-0 lg:flex-row lg:w-full lg:justify-end lg:items-center bg-gray-200/90 dark:bg-slate-700/90  lg:shadow-none lg:bg-transparent lg:dark:bg-transparent ${
             menu
               ? "text-right absolute right-8 z-10 shadow-lg"
@@ -78,19 +79,16 @@ function Navbar() {
               I Want
             </a>
           </Link>
-
           <Link href="/testfs">
             <a className="lg:w-20 px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100  lg:mx-2">
               FastFood
             </a>
           </Link>
-
           <Link href="/food">
             <a className="lg:w-20 px-4 py-4 lg:px-2 lg:py-2 text-md text-gray-800 rounded-md dark:text-gray-200 hover:bg-gray-900 hover:text-gray-100  lg:mx-2">
               Recipes
             </a>
           </Link>
-
           {user ? (
             <a
               onClick={() =>
@@ -110,7 +108,6 @@ function Navbar() {
               </a>
             </Link>
           )}
-
           <ToggleTheme />
         </div>
       </div>

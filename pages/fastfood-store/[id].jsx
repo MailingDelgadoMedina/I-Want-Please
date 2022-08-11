@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import fastFoodGenericPicture from "../../public/static/fastfood.jpg";
 
@@ -64,7 +64,6 @@ export async function getStaticPaths() {
 }
 
 const FastfoodStore = (initialProps) => {
-  const [voting, setVoting] = useState(false);
   const router = useRouter();
   const id = router.query.id;
   const [fastfoodStore, setFastfoodStore] = useState(
@@ -80,15 +79,6 @@ const FastfoodStore = (initialProps) => {
   const handleUpvote = async (id) => {
     await fetch(`/api/upvoteFastFoodStore?id=${id}`);
   };
-
-  // useEffect(() => {
-  //   console.log("Voting este acum: ", voting);
-  //   if (voting) {
-  //     // handleUpvote(id);
-  //     router.replace(router.asPath);
-  //     setVoting(false);
-  //   }
-  // }, [voting]);
 
   useEffect(() => {
     //Check if initialProps exists and if is empty
@@ -126,7 +116,7 @@ const FastfoodStore = (initialProps) => {
       console.log("Votes for this fastfood store are: ", data);
       setVotes(data);
     }
-  }, [data, voting]);
+  }, [data]);
 
   const [photos, setPhotos] = useState([fastFoodGenericPicture]);
 
@@ -139,11 +129,7 @@ const FastfoodStore = (initialProps) => {
   }, [fastfoodStore]);
 
   if (router.isFallback) {
-    return <div>Loading...</div>;
-  }
-
-  if (voting) {
-    return <div>Voting...</div>;
+    return <div className="text-center text-3xl">Loading...</div>;
   }
 
   return (
@@ -204,11 +190,8 @@ const FastfoodStore = (initialProps) => {
         <button
           className="text-2xl"
           onClick={(e) => {
-            // e.preventDefault;
             handleUpvote(id);
-            router.replace(router.asPath);
-            // router.reload();
-            // setVoting(true);
+            Router.reload(window.location.pathname);
           }}
         >
           Like!

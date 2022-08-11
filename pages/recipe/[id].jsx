@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { fetchRecipeDetails } from "../../lib/spoonacular";
 // import useSWR from "swr";
+import parse from "html-react-parser";
+import { Children } from "react";
 
 export async function getStaticProps(staticProps) {
   // Fetch recipe store data from spoonacular api
@@ -44,16 +46,20 @@ export async function getStaticPaths() {
   // };
   return {
     paths: [{ params: { id: "749013" } }, { params: { id: "602638" } }],
-    fallback: true, // can also be true or 'blocking'
+    fallback: true,
   };
 }
 
 const RecipeDetails = (initialProps) => {
-  console.log("BAAAAH, INITIAL PROPS!", initialProps);
   const router = useRouter();
   const id = router.query.id;
-  const { title, image, summary, instructions, ...allOtherProps } =
-    initialProps.recipe;
+  const { title, image, summary, instructions } = initialProps.recipe || [];
+
+  console.log("Ce lipseste???!?!??!?!?!??!?!", initialProps.recipe);
+
+  if (router.isFallback) {
+    return <div className="text-center text-3xl">Loading...</div>;
+  }
   return (
     <div className="text-center">
       <Link href="/food">
@@ -68,9 +74,33 @@ const RecipeDetails = (initialProps) => {
       <div className="text-center text-2xl dark:text-white">
         Recipe id is: <span className="text-blue-700">{id}</span>
       </div>
-      <p className="">{summary}</p>
 
-      <p>{instructions}</p>
+      {
+        // Must detect client window to parse the html string, otherwise it will throw an error
+        typeof window !== "undefined" ? (
+          <>
+            <div className="p-4">
+              {
+                //Parse the summary of the recipe
+                summary &&
+                  Children.toArray(
+                    parse(summary, {
+                      // Remove href (all) attributes from <a/> tag
+                      replace: (domNode) => {
+                        if (domNode.attribs && domNode.name === "a") {
+                          return (domNode.attribs = "");
+                        }
+                      },
+                    })
+                  )
+              }
+            </div>
+            <div className="p-4">
+              {instructions && Children.toArray(parse(instructions))}
+            </div>
+          </>
+        ) : null
+      }
     </div>
   );
 };
