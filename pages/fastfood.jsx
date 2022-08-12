@@ -1,21 +1,3 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-      require('@tailwindcss/aspect-ratio'),
-    ],
-  }
-  ```
-*/
-
 import Image from "next/image";
 import { Fragment, useState } from "react";
 import { Dialog, Menu, Transition } from "@headlessui/react";
@@ -38,10 +20,6 @@ import {
   ViewGridIcon as ViewGridIconSolid,
   ViewListIcon,
 } from "@heroicons/react/solid";
-
-const girl =
-  "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80";
-const imgF = "https://tailwindui.com/img/logos/workflow-mark.svg?color=white";
 
 const navigation = [
   { name: "Home", href: "#", icon: HomeIcon, current: false },
@@ -667,7 +645,7 @@ export default function Example() {
 // import {
 //   fetchFastFoodStores,
 //   getFastFoodPhoto,
-// } from "../foursquare/foursquare";
+// } from "../lib/foursquare";
 
 // import Image from "next/image";
 

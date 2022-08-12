@@ -1,34 +1,82 @@
 import { useRef, useState, useEffect } from "react";
-import { auth, provider } from "../firebase/config";
+import { auth, provider, db } from "../lib/firebase";
 import {
   signInWithRedirect,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import Image from "next/image";
 import Link from "next/link";
-import Footer from "../components/Footer";
+
+import { setUserGlobal } from "../redux/features/user/userSlice";
+import { useDispatch } from "react-redux";
+import { async } from "@firebase/util";
 
 const loginPicture =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224865/iWantImg/login_pencils_dfrpcs.jpg";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [user, loading, error] = useAuthState(auth);
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const [myMessage, setMessage] = useState("");
   const router = useRouter();
 
+  const checkUserInDatabase = async () => {
+    if (user) {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("This user exists. Welcome back!");
+      } else {
+        try {
+          const createdAt = new Date();
+          if (!user.displayName) {
+            user.displayName = user.email.split("@")[0];
+          }
+          // doc.data() will be undefined in this case
+          console.log("No such document! I will create one!");
+          await setDoc(docRef, {
+            email: user.email,
+            name: user.displayName,
+            createdAt: createdAt.toISOString(),
+          });
+        } catch (error) {
+          console.log("Error creating user.", error);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    // dispatch logged in user to redux store
+    if (user) {
+      const { uid, displayName, email, photoURL } = user;
+      router.push("/");
+      dispatch(setUserGlobal({ uid, displayName, email, photoURL }));
+      // Check if logged in user is in database and create if not
+      checkUserInDatabase();
+    } else {
+      dispatch(setUserGlobal(null));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   //Google Login
   const googleProvider = (e) => {
+    console.log({ e });
     e.preventDefault();
 
     signInWithRedirect(auth, provider)
       .then((result) => {
+        console.log({ result });
         setMessage(result.displaName);
         router.push("/iwant");
       })
@@ -84,6 +132,10 @@ const Login = () => {
     );
   };
 
+  // if (user) {
+  //   return router.push("/iwant");
+  // }
+
   return (
     <>
       <div className="lg:mt-36 flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl ">
@@ -109,7 +161,7 @@ const Login = () => {
 
             <a
               onClick={googleProvider}
-              className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
+              className="cursor-pointer flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
             >
               <div className="px-4 py-2">
                 <svg className="w-6 h-6" viewBox="0 0 40 40">

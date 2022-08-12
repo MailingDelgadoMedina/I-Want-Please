@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import { store } from "../store/store";
+import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import Layout from "../components/Layout";
 
@@ -8,9 +8,11 @@ import { ThemeProvider } from "next-themes";
 function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ThemeProvider attribute="class" defaultTheme="system">
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
     </Provider>
   );
 }
