@@ -138,7 +138,7 @@ const FastfoodStore = (initialProps) => {
         <a className="text-5xl text-center cursor-pointer">← Go Back</a>
       </Link>
       <div className="w-96 h-72 flex justify-center items-center">
-        {fastfoodStore && fastfoodStore.photos.length > 0 ? (
+        {fastfoodStore && fastfoodStore.photos?.length > 0 ? (
           <Swiper
             className="bg-gray-500 h-full w-full"
             modules={[Navigation]}
@@ -201,7 +201,7 @@ const FastfoodStore = (initialProps) => {
       <h2 className="text-2xl">
         Categories:{" "}
         <span>
-          {fastfoodStore.categories.map((category, idx) => {
+          {fastfoodStore.categories?.map((category, idx) => {
             return (
               category.name +
               (idx < fastfoodStore.categories.length - 1 ? ", " : "")
@@ -213,9 +213,9 @@ const FastfoodStore = (initialProps) => {
       <h3 className="text-xl ">
         Address:{" "}
         <span>
-          {fastfoodStore.location.formatted_address +
+          {fastfoodStore.location?.formatted_address +
             ", " +
-            fastfoodStore.location.country}
+            fastfoodStore.location?.country}
         </span>
       </h3>
     </div>

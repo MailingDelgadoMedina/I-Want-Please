@@ -4,10 +4,12 @@ import { db } from "../../lib/firebase";
 const getFastFoodStoreVotes = async (req, res) => {
   const { id } = req.query;
   if (!id) {
-    res.status(400).json({ message: "Missing id" });
+    console.log("No id provided");
+    res.status(400).json(0);
   } else {
     if (id.length !== 24) {
-      res.status(400).json({ message: "Wrong id" });
+      console.log("Invalid id");
+      res.status(400).json(0);
     } else {
       try {
         const docRef = doc(db, "fastfoodStores", id);

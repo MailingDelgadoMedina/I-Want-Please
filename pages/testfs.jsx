@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setFetchedStores,
   setSelectedStore,
+  setNearby,
 } from "../redux/features/fastfood/fastfoodSlice";
 import { setLatLong } from "../redux/features/latLong/latLongSlice";
 
@@ -31,7 +32,7 @@ const Testfs = (props) => {
 
   const stores = useSelector((state) => state.fastfood.fetchedStores);
   const latLong = useSelector((state) => state.latLong.latLong);
-  const [nearby, setNearby] = useState(false);
+  const nearby = useSelector((state) => state.fastfood.nearby);
   const [loading, setLoading] = useState(false);
 
   //get location data from browser
@@ -61,7 +62,7 @@ const Testfs = (props) => {
     );
     const response = await fetchedStores.json();
     dispatch(setFetchedStores(response));
-    setNearby(true);
+    dispatch(setNearby(true));
     setLoading(false);
   };
 
