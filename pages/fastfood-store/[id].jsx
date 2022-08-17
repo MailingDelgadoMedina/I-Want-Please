@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import fastFoodGenericPicture from "../../public/static/fastfood.jpg";
 
 import useSWR from "swr";
@@ -19,6 +19,11 @@ import {
 import { useEffect, useState } from "react";
 import { db } from "../../lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+
+import {
+  setSelectedStore,
+  setSelectedStoreVotes,
+} from "../../redux/features/fastfood/fastfoodSlice";
 
 export async function getStaticProps(staticProps) {
   // Fetch fastfood store data from Foursquare
@@ -66,11 +71,15 @@ export async function getStaticPaths() {
 const FastfoodStore = (initialProps) => {
   const router = useRouter();
   const id = router.query.id;
+  const dispatch = useDispatch();
   const [fastfoodStore, setFastfoodStore] = useState(
     initialProps.fastfoodStore || {}
   );
   const selectedStore = useSelector(
     (store) => store.fastfood.selectedStore || {}
+  );
+  const selectedStoreVotes = useSelector(
+    (store) => store.fastfood.selectedStoreVotes || 0
   );
   const fastfoodStores = useSelector(
     (store) => store.fastfood.fetchedStores || {}
@@ -80,25 +89,7 @@ const FastfoodStore = (initialProps) => {
     await fetch(`/api/upvoteFastFoodStore?id=${id}`);
   };
 
-  useEffect(() => {
-    //Check if initialProps exists and if is empty
-    if (
-      initialProps.fastfoodStore &&
-      Object.keys(initialProps.fastfoodStore).length === 0
-    ) {
-      //Check if the fastfoodStores state exists
-      if (fastfoodStores.length > 0) {
-        const findFastfoodStoreById = fastfoodStores.find(
-          (store) => store.fsq_id === params.id
-        );
-        setFastfoodStore(findFastfoodStoreById);
-      }
-    } else {
-      //Check if the id is ok and fetch the store
-      console.log("SSG");
-    }
-  }, [id, fastfoodStores, initialProps.fastfoodStore]);
-
+  // fetcher function for useSWR
   const fetcher = async (url) => {
     const response = await fetch(url);
     const data = await response.json();
@@ -106,17 +97,58 @@ const FastfoodStore = (initialProps) => {
   };
 
   const [votes, setVotes] = useState(0);
+
   const { data, error } = useSWR(
-    `/api/getFastFoodStoreVotes?id=${id}`,
+    id ? `/api/getFastFoodStoreVotes?id=${id}` : null,
     fetcher
   );
 
   useEffect(() => {
+    console.log("Data la linia 110 este: ", data);
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      // Check if store is in redux state
+      if (selectedStore && selectedStore.fsq_id === id) {
+        setFastfoodStore(selectedStore);
+      } else {
+        // Store not found in the redux state, fetch it from the api, set it in the redux state and set votes to 0
+        fetch(`/api/getFastFoodStoreById?id=${id}`).then((res) => {
+          res.json().then((data) => {
+            dispatch(setSelectedStore(data));
+            setFastfoodStore(data);
+            dispatch(setSelectedStoreVotes(0));
+          });
+        });
+      }
+    }
+  }, [id, fastfoodStores]);
+
+  useEffect(() => {
+    // If there are votes fetched from the api, set them in the redux state
     if (data && data !== 0) {
       console.log("Votes for this fastfood store are: ", data);
       setVotes(data);
+      if (selectedStoreVotes[id] !== data) {
+        console.log("setSelectedStoreVotes is:  ", { [id]: data });
+        dispatch(setSelectedStoreVotes({ [id]: data }));
+      }
+    } else if (
+      selectedStoreVotes &&
+      Object.keys(selectedStoreVotes)[0] === id
+    ) {
+      console.log("I have found votes in redux state");
+      setVotes(selectedStoreVotes[id]);
+    } else {
+      console.log("No votes found");
+      // If there are no votes fetched from the api, set the votes in the redux state to 0
+
+      if (selectedStoreVotes[id] !== 0) {
+        dispatch(setSelectedStoreVotes({ [id]: 0 }));
+      }
     }
-  }, [data]);
+  }, [data, selectedStoreVotes, id]);
 
   const [photos, setPhotos] = useState([fastFoodGenericPicture]);
 
@@ -152,6 +184,7 @@ const FastfoodStore = (initialProps) => {
                   priority
                   alt="fast-food store"
                   src={photo}
+                  as="img"
                   layout="responsive"
                   width={400}
                   height={400}
@@ -169,6 +202,7 @@ const FastfoodStore = (initialProps) => {
           >
             <SwiperSlide>
               <Image
+                priority
                 alt="fast-food store"
                 src={fastFoodGenericPicture}
                 layout="responsive"

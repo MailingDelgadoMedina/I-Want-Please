@@ -1,6 +1,6 @@
 import { fetchOneFastFoodStore } from "../../lib/foursquare";
 
-const getFastFoodStoresById = async (req, res) => {
+const getFastFoodStoreById = async (req, res) => {
   try {
     const { id } = req.query;
     const store = await fetchOneFastFoodStore(id);
@@ -12,4 +12,4 @@ const getFastFoodStoresById = async (req, res) => {
   }
 };
 
-export default getFastFoodStoresById;
+export default getFastFoodStoreById;

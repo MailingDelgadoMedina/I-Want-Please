@@ -3,6 +3,10 @@ import { db } from "../../lib/firebase";
 
 const getFastFoodStoreVotes = async (req, res) => {
   const { id } = req.query;
+  if (typeof id === "undefined") {
+    console.log("id is undefined baaaaaah!");
+    res.status(400).json(0);
+  }
   if (!id) {
     console.log("No id provided");
     res.status(400).json(0);
