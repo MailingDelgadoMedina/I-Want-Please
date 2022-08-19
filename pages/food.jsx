@@ -58,7 +58,7 @@ const Food = () => {
           <div className="flex flex-col gap-6 mt-4 sm:grid-cols-2">
             <div>
               <label
-                className="text-gray-700 dark:text-gray-200"
+                className="text-gray-700 dark:text-gray-300"
                 htmlFor="search"
               >
                 Recipe Name
@@ -77,7 +77,7 @@ const Food = () => {
 
                 setAdvancedSearch(!advancedSearch);
               }}
-              className=" text-gray-700 flex justify-center items-center px-6 py-2 leading-5 dark:text-white transition-colors duration-200 transform bg-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-400 hover:text-black dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              className=" text-gray-700 flex justify-center items-center px-6 py-2 leading-5 dark:text-white transition-colors duration-200 transform bg-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-400 hover:text-black dark:hover:bg-gray-600 focus:outline-none"
             >
               <div
                 className={`text-gray-700 hover:text-black dark:text-gray-300 h-6 w-6 mr-2 transition-all duration-300 ${
@@ -86,7 +86,7 @@ const Food = () => {
               >
                 {<ChevronDoubleDownIcon />}
               </div>
-              {advancedSearch ? `Show Simple Search` : "Show Advanced Search"}
+              {advancedSearch ? "Show Simple Search" : "Show Advanced Search"}
             </button>
             {advancedSearch ? (
               <>

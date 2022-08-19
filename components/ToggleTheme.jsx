@@ -2,6 +2,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleTheme } from "../redux/features/theme/themeSlice";
+import { useSelector } from "react-redux";
 
 export const ToggleTheme = () => {
   const [mounted, setMounted] = useState(false);
@@ -11,6 +12,14 @@ export const ToggleTheme = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      if (theme) {
+        dispatch(toggleTheme(theme));
+      }
+    }
+  }, [theme]);
 
   if (!mounted) return null;
 

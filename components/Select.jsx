@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { components, createFilter } from "react-select";
 import { default as ReactSelect } from "react-select";
+import { useSelector } from "react-redux";
 
 // //custom checkbox component for the dropdown.
 const Option = (props) => {
@@ -134,7 +135,9 @@ const Select = ({
   advancedSearchQuery,
   setAdvancedSearchQuery,
 }) => {
+  const reduxTheme = useSelector((state) => state.theme.theme);
   const [optionSelected, setOptionSelected] = useState(null);
+  console.log("Redux Theme: ", reduxTheme);
 
   const handleChange = (selected) => {
     setOptionSelected(selected);
@@ -149,7 +152,7 @@ const Select = ({
     <div className="m-2 ">
       <label
         htmlFor={name}
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400 capitalize"
+        className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-400 capitalize"
       >
         {name}
       </label>
@@ -160,7 +163,7 @@ const Select = ({
         controlShouldRenderValue={false}
         isClearable={true}
         backspaceRemovesValue={false}
-        styles={false ? customStylesWhite : customStyles}
+        styles={reduxTheme === "light" ? customStylesWhite : customStyles}
         id={name}
         options={values}
         isMulti

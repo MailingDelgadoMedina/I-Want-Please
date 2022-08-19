@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -15,7 +15,6 @@ import Link from "next/link";
 
 import { setUserGlobal } from "../redux/features/user/userSlice";
 import { useDispatch } from "react-redux";
-import { async } from "@firebase/util";
 
 const loginPicture =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224865/iWantImg/login_pencils_dfrpcs.jpg";
@@ -25,7 +24,6 @@ const Login = () => {
   const [user, loading, error] = useAuthState(auth);
   const emailRef = useRef("");
   const passwordRef = useRef("");
-  const [myMessage, setMessage] = useState("");
   const router = useRouter();
 
   const checkUserInDatabase = async () => {
@@ -34,7 +32,7 @@ const Login = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("This user exists. Welcome back!");
+        console.log(`Welcome back, ${docSnap.data().name}`);
       } else {
         try {
           const createdAt = new Date();
@@ -71,27 +69,15 @@ const Login = () => {
 
   //Google Login
   const googleProvider = (e) => {
-    console.log({ e });
     e.preventDefault();
 
-    signInWithRedirect(auth, provider)
-      .then((result) => {
-        console.log({ result });
-        setMessage(result.displaName);
-        router.push("/iwant");
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    signInWithRedirect(auth, provider).catch((error) => {
+      console.log(error.message);
+    });
   };
   //Sign In
   const signIn = (e) => {
     e.preventDefault();
-
-    console.log(emailRef.current.value);
-    console.log(passwordRef.current.value);
-    console.log(`Hello ${emailRef.current.value}`);
-
     signInWithEmailAndPassword(
       auth,
       emailRef.current.value,
@@ -131,10 +117,6 @@ const Login = () => {
       `If there is an account associated with this email, we will send an email for reset to " ${emailRef.current.value}`
     );
   };
-
-  // if (user) {
-  //   return router.push("/iwant");
-  // }
 
   return (
     <>
@@ -188,18 +170,6 @@ const Login = () => {
                 Sign in with Google
               </span>
             </a>
-
-            {/* <a
-         onClick={logOut}
-          className="flex items-center justify-center mt-4 text-gray-600 transition-colors duration-200 transform border rounded-lg dark:border-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
-        >
-          
-         
-
-          <span className="w-5/6 px-4 py-3 font-bold text-center">
-          Log Out
-          </span>
-        </a> */}
 
             <div className="flex items-center justify-between mt-4">
               <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>

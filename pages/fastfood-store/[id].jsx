@@ -165,7 +165,7 @@ const FastfoodStore = (initialProps) => {
   }
 
   return (
-    <div className="bg-gray-700 flex flex-col items-center">
+    <div className="bg-gray-200 dark:bg-gray-700 flex flex-col items-center">
       <Link href="/testfs">
         <a className="text-5xl text-center cursor-pointer">← Go Back</a>
       </Link>

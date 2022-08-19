@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../lib/firebase";
 import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -10,17 +10,30 @@ import { useRouter } from "next/router";
 
 import { useDispatch, useSelector } from "react-redux";
 
+import { setLatLong } from "../redux/features/latLong/latLongSlice";
+import {
+  setFetchedStores,
+  setSelectedStore,
+  setNearby,
+} from "../redux/features/fastfood/fastfoodSlice";
+
 const twoKids =
   "https://res.cloudinary.com/programandoconmei/image/upload/v1656224864/iWantImg/two_kids_bw_tv8pki.jpg";
 
 export default function Home() {
-  const [menu, setMenu] = useState(false);
-  const [user, loading, error] = useAuthState(auth);
-  const router = useRouter();
   const dispatch = useDispatch();
-  // const authorized = useAuth();
 
-  // if (authorized.loading) return "loading...";
+  // Reset redux store to initial values.
+  useEffect(() => {
+    dispatch(setNearby(false));
+    dispatch(setSelectedStore({}));
+    dispatch(setFetchedStores([]));
+    dispatch(setLatLong(null));
+  }, []);
+
+  // const [user, loading, error] = useAuthState(auth);
+
+  // const router = useRouter();
 
   return (
     <div className="bg-white dark:bg-gray-800">
@@ -55,12 +68,6 @@ export default function Home() {
                   className="block px-3 py-2 text-sm font-semibold text-center text-white transition-colors duration-200 transform bg-gray-900 rounded-md hover:bg-gray-700"
                 >
                   Get Started
-                </a>
-                <a
-                  href="#"
-                  className="hidden block px-3 py-2 text-sm font-semibold text-center text-gray-700 transition-colors duration-200 transform bg-gray-200 rounded-md lg:mx-4 hover:bg-gray-300"
-                >
-                  Learn More
                 </a>
               </div>
             </div>
