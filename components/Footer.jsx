@@ -3,6 +3,7 @@ const Footer = () => {
     <div>
       <footer className="lg:mt-12 bg-white dark:bg-gray-800">
         <div className="container px-6 py-4 mx-auto">
+          <hr className="h-px my-6 bg-gray-300 border-none dark:bg-gray-700" />
           <div className="lg:flex">
             <div className="w-full -mx-6 lg:w-2/5">
               <div className="px-6">

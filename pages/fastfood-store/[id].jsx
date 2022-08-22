@@ -104,10 +104,6 @@ const FastfoodStore = (initialProps) => {
   );
 
   useEffect(() => {
-    console.log("Data la linia 110 este: ", data);
-  }, []);
-
-  useEffect(() => {
     if (id) {
       // Check if store is in redux state
       if (selectedStore && selectedStore.fsq_id === id) {
@@ -123,6 +119,7 @@ const FastfoodStore = (initialProps) => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, fastfoodStores]);
 
   useEffect(() => {
@@ -148,6 +145,7 @@ const FastfoodStore = (initialProps) => {
         dispatch(setSelectedStoreVotes({ [id]: 0 }));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, selectedStoreVotes, id]);
 
   const [photos, setPhotos] = useState([fastFoodGenericPicture]);
@@ -160,22 +158,34 @@ const FastfoodStore = (initialProps) => {
     }
   }, [fastfoodStore]);
 
+  //
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 1024);
+
+  const updateMedia = () => {
+    setDesktop(window.innerWidth > 1024);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  });
+
   if (router.isFallback) {
     return <div className="text-center text-3xl">Loading...</div>;
   }
 
   return (
-    <div className="bg-gray-200 dark:bg-gray-700 flex flex-col items-center">
+    <div className="bg-gray-200 dark:bg-gray-700 flex flex-col justify-center items-center">
       <Link href="/testfs">
         <a className="text-5xl text-center cursor-pointer">← Go Back</a>
       </Link>
-      <div className="w-96 h-72 flex justify-center items-center">
+      <div className="container flex">
         {fastfoodStore && fastfoodStore.photos?.length > 0 ? (
           <Swiper
-            className="bg-gray-500 h-full w-full"
+            className=""
             modules={[Navigation]}
-            spaceBetween={50}
-            slidesPerView={1}
+            spaceBetween={10}
+            slidesPerView={`${isDesktop ? "2" : "1"}`}
             navigation
           >
             {fastfoodStore.photos.map((photo, idx) => (
@@ -185,9 +195,10 @@ const FastfoodStore = (initialProps) => {
                   alt="fast-food store"
                   src={photo}
                   as="img"
-                  layout="responsive"
-                  width={400}
-                  height={400}
+                  layout="intrinsic"
+                  width={900}
+                  height={900}
+                  sizes="50vw"
                 />
               </SwiperSlide>
             ))}

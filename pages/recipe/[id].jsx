@@ -4,6 +4,7 @@ import { fetchRecipeDetails } from "../../lib/spoonacular";
 // import useSWR from "swr";
 import parse from "html-react-parser";
 import { Children } from "react";
+import Image from "next/image";
 
 export async function getStaticProps(staticProps) {
   // Fetch recipe store data from spoonacular api
@@ -55,20 +56,26 @@ const RecipeDetails = (initialProps) => {
   const id = router.query.id;
   const { title, image, summary, instructions } = initialProps.recipe || [];
 
-  console.log("Ce lipseste???!?!??!?!?!??!?!", initialProps.recipe);
-
   if (router.isFallback) {
     return <div className="text-center text-3xl">Loading...</div>;
   }
   return (
-    <div className="text-center">
+    <div className="text-center flex flex-col items-center">
       <Link href="/food">
         <a className="text-5xl text-center cursor-pointer">← Go Back</a>
       </Link>
 
       <h1 className="text-5xl">{title}</h1>
-      <div className="p-4 flex justify-center">
-        <img src={image} alt={title} />
+      <div className="container p-4 flex justify-center overflow-hidden">
+        <Image
+          src={image}
+          alt={`Photo of ${title}`}
+          layout="intrinsic"
+          width={400}
+          height={400}
+          sizes="50vw"
+          className="object-cover"
+        />
       </div>
 
       <div className="text-center text-2xl dark:text-white">
