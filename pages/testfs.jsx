@@ -73,6 +73,7 @@ const Testfs = (props) => {
     } else {
       dispatch(setFetchedStores(props.fastfoodStores));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -19,6 +19,7 @@ export const ToggleTheme = () => {
         dispatch(toggleTheme(theme));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
   if (!mounted) return null;

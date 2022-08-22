@@ -10,24 +10,32 @@ const FastFoodCard = ({ store }) => {
   }${store.location.country}`;
   return (
     <Link href={`/fastfood-store/${store.fsq_id}`}>
-      <div className="hover:cursor-pointer overflow-hidden p-2 flex flex-col m-2 h-48 w-64 bg-gray-200 dark:bg-slate-700 justify-between border-2 border-gray-400 dark:border-black shadow-sm shadow-gray-400/50 hover:scale-105 transition-all duration-300">
+      <div className="hover:cursor-pointer overflow-hidden p-2 flex flex-col m-2 h-96 w-64 bg-gray-200 dark:bg-slate-700 justify-between border-2 border-gray-400 dark:border-black shadow-sm shadow-gray-400/50 hover:scale-105 transition-all duration-300">
+        <h1 className="h-8 mt-1 mb-3 text-center overflow-clip dark:text-sky-100 text-sky-900">
+          {store.name}
+        </h1>
+
         <div className="h-full w-full text-center">
+          <hr className="mb-1 border-slate-600 dark:border-gray-400" />
           <Image
             src={
               store.photos.length > 0 ? store.photos[0] : fastFoodGenericPicture
             }
             alt={`Photo of ${store.name}`}
             layout="responsive"
-            width={200}
-            height={90}
+            width={500}
+            height={500}
             sizes="50vw"
-            className="object-cover"
+            className="object-cover rounded-md"
           />
+          <hr className="mt-1 border-slate-600 dark:border-gray-400" />
         </div>
 
-        <h1 className="mt-2 text-center ">{store.name}</h1>
-        <p className="text-center mb-2">
-          Address: <span>{storeLocation}</span>
+        <p className="text-center text-sm mb-2 place-self-center">
+          Address:{" "}
+          <span className="text-sky-800 dark:text-sky-200">
+            {storeLocation}
+          </span>
         </p>
       </div>
     </Link>

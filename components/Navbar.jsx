@@ -23,7 +23,7 @@ function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="">
+    <nav className="mx-auto container">
       <div className="relative lg:flex flex-row py-6 px-6 lg:justify-between">
         <div className="flex items-center justify-between w-full">
           <div className="flex justify-center content-center">

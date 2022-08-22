@@ -5,6 +5,7 @@ import { fetchRecipeDetails } from "../../lib/spoonacular";
 import parse from "html-react-parser";
 import { Children } from "react";
 import Image from "next/image";
+import Tooltip from "../../components/Tooltip";
 
 export async function getStaticProps(staticProps) {
   // Fetch recipe store data from spoonacular api
@@ -56,37 +57,80 @@ const RecipeDetails = (initialProps) => {
   const id = router.query.id;
   const { title, image, summary, instructions } = initialProps.recipe || [];
 
+  console.log("Ce avem noi aici?", initialProps.recipe);
+
   if (router.isFallback) {
     return <div className="text-center text-3xl">Loading...</div>;
   }
   return (
-    <div className="text-center flex flex-col items-center">
+    <div className="py-8 lg:px-4 mx-auto bg-gray-200 dark:bg-gray-700 container flex flex-col place-items-center">
       <Link href="/food">
-        <a className="text-5xl text-center cursor-pointer">← Go Back</a>
+        <a className="w-full ml-8 my-2 text-4xl text-left cursor-pointer">
+          ← Go Back
+        </a>
       </Link>
 
-      <h1 className="text-5xl">{title}</h1>
-      <div className="container p-4 flex justify-center overflow-hidden">
+      <h1 className="text-3xl pb-4 text-sky-800 dark:text-sky-200">{title}</h1>
+      <div className="lg:p-8 w-11/12 flex lg:w-9/12 lg:max-h-[700px] overflow-hidden justify-center">
         <Image
           src={image}
           alt={`Photo of ${title}`}
           layout="intrinsic"
-          width={400}
-          height={400}
+          width={500}
+          height={500}
           sizes="50vw"
-          className="object-cover"
+          className="object-cover rounded-md"
         />
       </div>
 
       <div className="text-center text-2xl dark:text-white">
-        Recipe id is: <span className="text-blue-700">{id}</span>
+        <h3>
+          Total time to make:{" "}
+          <span className="dark:text-sky-300">
+            {initialProps.recipe.preparationMinutes +
+              initialProps.recipe.cookingMinutes}
+          </span>
+        </h3>
+        <p className="text-sm">
+          {" "}
+          Minutes to prepare:
+          <span className="dark:text-sky-300">
+            {initialProps.recipe.preparationMinutes}
+          </span>{" "}
+        </p>
+        <p className="text-sm">
+          {" "}
+          Minutes to cook:
+          <span className="dark:text-sky-300">
+            {initialProps.recipe.cookingMinutes}
+          </span>{" "}
+        </p>
+
+        <p className="mt-4">Ingredients:</p>
+        {initialProps.recipe.extendedIngredients.map((ingredient) => (
+          <Tooltip key={ingredient.id} message={ingredient.original}>
+            <p className="text-sm" key={ingredient.id}>
+              {ingredient.name}: {ingredient.amount} {ingredient.unit}
+              <br />
+            </p>
+          </Tooltip>
+        ))}
       </div>
+
+      <a
+        className="mt-8"
+        href={initialProps.recipe.sourceUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {initialProps.recipe.sourceUrl}
+      </a>
 
       {
         // Must detect client window to parse the html string, otherwise it will throw an error
         typeof window !== "undefined" ? (
           <>
-            <div className="p-4">
+            <div className="p-4 max-w-7xl">
               {
                 //Parse the summary of the recipe
                 summary &&

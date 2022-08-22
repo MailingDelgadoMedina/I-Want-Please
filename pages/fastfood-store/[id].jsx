@@ -3,6 +3,7 @@ import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 import fastFoodGenericPicture from "../../public/static/fastfood.jpg";
+import Tooltip from "../../components/Tooltip";
 
 import useSWR from "swr";
 
@@ -104,6 +105,7 @@ const FastfoodStore = (initialProps) => {
   );
 
   useEffect(() => {
+    console.log("fastfoodStore is....: ", fastfoodStore);
     if (id) {
       // Check if store is in redux state
       if (selectedStore && selectedStore.fsq_id === id) {
@@ -162,7 +164,7 @@ const FastfoodStore = (initialProps) => {
   const [isDesktop, setDesktop] = useState(window.innerWidth > 1024);
 
   const updateMedia = () => {
-    setDesktop(window.innerWidth > 1024);
+    setDesktop(window.innerWidth > 1280);
   };
 
   useEffect(() => {
@@ -175,17 +177,22 @@ const FastfoodStore = (initialProps) => {
   }
 
   return (
-    <div className="bg-gray-200 dark:bg-gray-700 flex flex-col justify-center items-center">
+    <div className="py-8 lg:px-4 mx-auto bg-gray-200 dark:bg-gray-700 container flex flex-col place-items-center">
       <Link href="/testfs">
-        <a className="text-5xl text-center cursor-pointer">← Go Back</a>
+        <a className="w-full ml-8 my-2 text-4xl text-left cursor-pointer">
+          ← Go Back
+        </a>
       </Link>
-      <div className="container flex">
+      <h1 className="text-3xl pb-4 text-sky-800 dark:text-sky-200">
+        {fastfoodStore.name}
+      </h1>
+      <div className="lg:p-8 w-11/12 flex lg:w-9/12 lg:max-h-[700px] overflow-hidden">
         {fastfoodStore && fastfoodStore.photos?.length > 0 ? (
           <Swiper
             className=""
             modules={[Navigation]}
             spaceBetween={10}
-            slidesPerView={`${isDesktop ? "2" : "1"}`}
+            slidesPerView={isDesktop ? "2" : "1"}
             navigation
           >
             {fastfoodStore.photos.map((photo, idx) => (
@@ -224,38 +231,58 @@ const FastfoodStore = (initialProps) => {
           </Swiper>
         )}
       </div>
-      <h1 className="text-3xl underline underline-offset-8 pb-4">
-        {fastfoodStore.name}
-      </h1>
 
-      <div className="flex">
-        <h1 className="text-3xl">
-          ⭐ <span className="text-2xl mr-10">{votes}</span>
-        </h1>
-        <button
-          className="text-2xl"
-          onClick={(e) => {
-            handleUpvote(id);
-            Router.reload(window.location.pathname);
-          }}
-        >
-          Like!
-        </button>
-      </div>
+      <div className="w-full py-2 px-8 flex justify-between items-center">
+        <div className="flex items-center">
+          <h1 className="text-3xl">
+            ⭐ <span className="text-2xl mr-6">{votes}</span>
+          </h1>
+          <Tooltip message={"Vote"}>
+            <button
+              className="text-2xl"
+              onClick={(e) => {
+                handleUpvote(id);
+                Router.reload(window.location.pathname);
+              }}
+            >
+              👍
+            </button>
+          </Tooltip>
+        </div>
 
-      <h2 className="text-2xl">
-        Categories:{" "}
-        <span>
+        <h3 className="hidden xl:block text-xl p-4">
+          Address:{" "}
+          <span className="text-sky-700 dark:text-sky-400">
+            {fastfoodStore.location?.formatted_address +
+              ", " +
+              fastfoodStore.location?.country}
+          </span>
+        </h3>
+
+        <div className="text-2xl flex text-gray-700">
           {fastfoodStore.categories?.map((category, idx) => {
             return (
-              category.name +
-              (idx < fastfoodStore.categories.length - 1 ? ", " : "")
+              <div className="relative" key={category.id}>
+                <Tooltip message={category.name}>
+                  <div className="flex flex-col items-center group">
+                    <Image
+                      src={`${category.icon.prefix}32${category.icon.suffix}`}
+                      alt={category.name}
+                      className="ml-2 bg-gray-700"
+                      width={32}
+                      height={32}
+                    />
+                  </div>
+                </Tooltip>
+              </div>
             );
           })}
-        </span>
-      </h2>
+        </div>
+      </div>
 
-      <h3 className="text-xl ">
+      <hr className="hidden border w-full max-w-xl border-gray-700 dark:border-gray-200" />
+
+      <h3 className="text-xl p-4 xl:hidden">
         Address:{" "}
         <span>
           {fastfoodStore.location?.formatted_address +
