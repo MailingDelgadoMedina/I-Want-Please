@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Select from "../components/Select";
 import { ChevronDoubleDownIcon } from "@heroicons/react/outline";
@@ -27,16 +26,6 @@ const Food = () => {
     includeIngredients: "",
   });
 
-  useEffect(() => {
-    console.log("🔍 advancedSearchQuery is..... ", advancedSearchQuery);
-  }),
-    [advancedSearchQuery];
-
-  useEffect(() => {
-    console.log("🔍 recipes.results is..... ", recipes);
-    console.log("2 recipes.results is..... ", recipes.results);
-  }),
-    [recipes];
   // Function to transform advancedSearchQuery to a string
   const transformAdvancedSearchQuery = () => {
     let query = "";
@@ -189,10 +178,9 @@ const Food = () => {
               onClick={(e) => {
                 e.preventDefault();
                 const query = searchRef.current.value;
-                console.log("🍔 query is: ", query);
                 const stringToSearch = transformAdvancedSearchQuery();
                 advancedSearchForRecipes(query, stringToSearch).then((data) => {
-                  console.log("Data from advancedSearchForRecipes", data);
+                  // console.log("Data from advancedSearchForRecipes", data);
                   dispatch(setRecipes(data));
                   searchRef.current.value = "";
                 });

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { auth, provider, db } from "../lib/firebase";
 import {
   signInWithRedirect,
@@ -128,6 +128,7 @@ const Login = () => {
             layout="intrinsic"
             width={700}
             height={860}
+            className="rounded-lg opacity-90 dark:opacity-100"
           />
         </div>
 
@@ -174,10 +175,7 @@ const Login = () => {
             <div className="flex items-center justify-between mt-4">
               <span className="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
 
-              <a
-                href="#"
-                className="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline"
-              >
+              <a className="text-xs text-center text-gray-500 uppercase dark:text-gray-400">
                 or login with email
               </a>
 

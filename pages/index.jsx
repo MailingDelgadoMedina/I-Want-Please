@@ -29,6 +29,7 @@ export default function Home() {
     dispatch(setSelectedStore({}));
     dispatch(setFetchedStores([]));
     dispatch(setLatLong(null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const [user, loading, error] = useAuthState(auth);

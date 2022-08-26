@@ -137,7 +137,6 @@ const Select = ({
 }) => {
   const reduxTheme = useSelector((state) => state.theme.theme);
   const [optionSelected, setOptionSelected] = useState(null);
-  console.log("Redux Theme: ", reduxTheme);
 
   const handleChange = (selected) => {
     setOptionSelected(selected);
@@ -145,8 +144,6 @@ const Select = ({
       ...advancedSearchQuery,
       [name[0]]: selected.map((option) => option.value.replace(/\s+/g, "%20")),
     });
-    console.log({ selected });
-    console.log(name[0]);
   };
   return (
     <div className="m-2 ">

@@ -9,6 +9,7 @@ const nextConfig = {
       "res.cloudinary.com",
       "images.unsplash.com",
       "spoonacular.com",
+      "ss3.4sqi.net",
     ],
   },
 };
