@@ -137,7 +137,7 @@ const FastfoodStore = (initialProps) => {
       selectedStoreVotes &&
       Object.keys(selectedStoreVotes)[0] === id
     ) {
-      console.log("I have found votes in redux state");
+      // console.log("I have found votes in redux state");
       setVotes(selectedStoreVotes[id]);
     } else {
       console.log("No votes found");
