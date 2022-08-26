@@ -12,13 +12,12 @@ const Footer = () => {
                     href="#"
                     className="text-xl font-bold text-gray-800 dark:text-white hover:text-gray-700 dark:hover:text-gray-300"
                   >
-                    Brand
+                    I Want Please
                   </a>
                 </div>
 
                 <p className="max-w-md mt-2 text-gray-500 dark:text-gray-400">
-                  Join 31,000+ other and never miss out on new tips, tutorials,
-                  and more.
+                  You are welcome!
                 </p>
 
                 <div className="flex mt-4 -mx-2">

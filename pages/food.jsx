@@ -180,7 +180,7 @@ const Food = () => {
                 const query = searchRef.current.value;
                 const stringToSearch = transformAdvancedSearchQuery();
                 advancedSearchForRecipes(query, stringToSearch).then((data) => {
-                  console.log("Data from advancedSearchForRecipes", data);
+                  // console.log("Data from advancedSearchForRecipes", data);
                   dispatch(setRecipes(data));
                   searchRef.current.value = "";
                 });

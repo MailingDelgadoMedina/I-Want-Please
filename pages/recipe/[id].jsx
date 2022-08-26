@@ -6,6 +6,7 @@ import parse from "html-react-parser";
 import { Children } from "react";
 import Image from "next/image";
 import Tooltip from "../../components/Tooltip";
+import TalkButton from "../../components/TalkButton";
 
 export async function getStaticProps(staticProps) {
   // Fetch recipe store data from spoonacular api
@@ -57,8 +58,6 @@ const RecipeDetails = (initialProps) => {
   const id = router.query.id;
   const { title, image, summary, instructions } = initialProps.recipe || [];
 
-  console.log("Ce avem noi aici?", initialProps.recipe);
-
   if (router.isFallback) {
     return <div className="text-center text-3xl">Loading...</div>;
   }
@@ -71,7 +70,7 @@ const RecipeDetails = (initialProps) => {
       </Link>
 
       <h1 className="text-3xl pb-4 text-sky-800 dark:text-sky-200">{title}</h1>
-      <div className="lg:p-8 w-11/12 flex lg:w-9/12 lg:max-h-[700px] overflow-hidden justify-center">
+      <div className="lg:p-8 w-11/12 flex flex-col lg:w-9/12 lg:max-h-[700px] overflow-hidden justify-center">
         <Image
           src={image}
           alt={`Photo of ${title}`}
@@ -82,8 +81,9 @@ const RecipeDetails = (initialProps) => {
           className="object-cover rounded-md"
         />
       </div>
+      <hr className="mt-2 w-full" />
 
-      <div className="text-center text-2xl dark:text-white">
+      <div className="text-center text-2xl dark:text-white pt-4">
         <h3>
           Total time to make:{" "}
           <span className="dark:text-sky-300">
@@ -115,10 +115,23 @@ const RecipeDetails = (initialProps) => {
             </p>
           </Tooltip>
         ))}
+
+        <div className="p-4">
+          <TalkButton
+            text={`Total time to make is ${
+              initialProps.recipe.preparationMinutes +
+              initialProps.recipe.cookingMinutes
+            }
+                The ingredients are: ${initialProps.recipe.extendedIngredients.map(
+                  (ingredient) =>
+                    `${ingredient.name} ${ingredient.amount} ${ingredient.unit}`
+                )}`}
+          />
+        </div>
       </div>
 
       <a
-        className="mt-8"
+        className="mt-8 mx-2"
         href={initialProps.recipe.sourceUrl}
         target="_blank"
         rel="noreferrer"
@@ -130,25 +143,60 @@ const RecipeDetails = (initialProps) => {
         // Must detect client window to parse the html string, otherwise it will throw an error
         typeof window !== "undefined" ? (
           <>
-            <div className="p-4 max-w-7xl">
+            <div className="p-4 max-w-7xl flex flex-col items-center">
               {
                 //Parse the summary of the recipe
-                summary &&
-                  Children.toArray(
-                    parse(summary, {
-                      // Remove href (all) attributes from <a/> tag
-                      replace: (domNode) => {
-                        if (domNode.attribs && domNode.name === "a") {
-                          return (domNode.attribs = "");
-                        }
-                      },
-                    })
-                  )
+                summary && (
+                  <div className="p-2">
+                    <p className="text-lg p-2 text-sky-900 dark:text-sky-200">
+                      Summary
+                    </p>
+                    <hr className="pb-1 mx-2" />
+
+                    <div className="mx-2">
+                      {Children.toArray(
+                        parse(summary, {
+                          // Remove href (all) attributes from <a/> tag
+                          replace: (domNode) => {
+                            if (domNode.attribs && domNode.name === "a") {
+                              return (domNode.attribs = "");
+                            }
+                          },
+                        })
+                      )}
+                    </div>
+                    <div className="w-full p-2 mt-4">
+                      <TalkButton
+                        text={summary
+                          .replaceAll(/(<([^>]+)>)/gi, "")
+                          .toString()}
+                      />
+                    </div>
+                  </div>
+                )
               }
             </div>
-            <div className="p-4">
-              {instructions && Children.toArray(parse(instructions))}
-            </div>
+            {instructions && (
+              <div className="p-4 max-w-7xl flex flex-col items-center">
+                <div className="p-2">
+                  <p className="text-lg p-2 text-sky-900 dark:text-sky-200">
+                    Instructions
+                  </p>
+                  <hr className="pb-1 mx-2" />
+
+                  <div className="mx-2">
+                    {Children.toArray(parse(instructions))}
+                  </div>
+                </div>
+                <div className="w-full p-4">
+                  <TalkButton
+                    text={instructions
+                      .replaceAll(/(<([^>]+)>)/gi, "")
+                      .toString()}
+                  />
+                </div>
+              </div>
+            )}
           </>
         ) : null
       }

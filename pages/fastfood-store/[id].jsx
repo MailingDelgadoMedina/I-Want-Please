@@ -105,7 +105,7 @@ const FastfoodStore = (initialProps) => {
   );
 
   useEffect(() => {
-    console.log("fastfoodStore is....: ", fastfoodStore);
+    // console.log("fastfoodStore is....: ", fastfoodStore);
     if (id) {
       // Check if store is in redux state
       if (selectedStore && selectedStore.fsq_id === id) {
@@ -127,10 +127,10 @@ const FastfoodStore = (initialProps) => {
   useEffect(() => {
     // If there are votes fetched from the api, set them in the redux state
     if (data && data !== 0) {
-      console.log("Votes for this fastfood store are: ", data);
+      // console.log("Votes for this fastfood store are: ", data);
       setVotes(data);
       if (selectedStoreVotes[id] !== data) {
-        console.log("setSelectedStoreVotes is:  ", { [id]: data });
+        // console.log("setSelectedStoreVotes is:  ", { [id]: data });
         dispatch(setSelectedStoreVotes({ [id]: data }));
       }
     } else if (
@@ -189,10 +189,12 @@ const FastfoodStore = (initialProps) => {
       <div className="lg:p-8 w-11/12 flex lg:w-9/12 lg:max-h-[700px] overflow-hidden">
         {fastfoodStore && fastfoodStore.photos?.length > 0 ? (
           <Swiper
-            className=""
+            className="w-full"
             modules={[Navigation]}
             spaceBetween={10}
-            slidesPerView={isDesktop ? "2" : "1"}
+            slidesPerView={
+              fastfoodStore.photos.length === 1 ? "1" : isDesktop ? "2" : "1"
+            }
             navigation
           >
             {fastfoodStore.photos.map((photo, idx) => (

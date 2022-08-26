@@ -15,8 +15,8 @@ function Speech() {
         Speak by Typing Service
       </h2>
       <p className="mt-3 text-center text-gray-600 dark:text-gray-400">
-        Type your text on the textbox and click on `&quot;`Talk`&quot;`to
-        convert your text to speech.
+        Type your text on the textbox and click on &quot;Talk&quot; to convert
+        your text to speech.
       </p>
 
       <div className="mt-6 ">
