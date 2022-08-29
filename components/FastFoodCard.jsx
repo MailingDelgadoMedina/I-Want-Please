@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import fastFoodGenericPicture from "../public/static/fastfood.jpg";
+import fastFoodGenericPicture from "../public/static/pngwing.com.png";
 
 const FastFoodCard = ({ store }) => {
   const storeLocation = `${
@@ -26,7 +26,9 @@ const FastFoodCard = ({ store }) => {
             width={500}
             height={500}
             sizes="50vw"
-            className="object-cover rounded-md"
+            className={`object-cover rounded-md ${
+              store.photos.length === 0 ? "dark:opacity-50" : ""
+            }`}
           />
           <hr className="mt-1 border-slate-600 dark:border-gray-400" />
         </div>

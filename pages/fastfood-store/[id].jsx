@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
-import fastFoodGenericPicture from "../../public/static/fastfood.jpg";
+import fastFoodGenericPicture from "../../public/static/pngwing.com.png";
 import Tooltip from "../../components/Tooltip";
 
 import useSWR from "swr";
@@ -186,7 +186,7 @@ const FastfoodStore = (initialProps) => {
       <h1 className="text-3xl pb-4 text-sky-800 dark:text-sky-200">
         {fastfoodStore.name}
       </h1>
-      <div className="lg:p-8 w-11/12 flex lg:w-9/12 lg:max-h-[700px] overflow-hidden">
+      <div className="lg:p-8 w-11/12 flex justify-center lg:w-9/12 lg:max-h-[700px] overflow-hidden">
         {fastfoodStore && fastfoodStore.photos?.length > 0 ? (
           <Swiper
             className="w-full"
@@ -205,32 +205,22 @@ const FastfoodStore = (initialProps) => {
                   src={photo}
                   as="img"
                   layout="intrinsic"
-                  width={900}
-                  height={900}
-                  sizes="50vw"
+                  width={400}
+                  height={400}
                 />
               </SwiperSlide>
             ))}
           </Swiper>
         ) : (
-          <Swiper
-            className="bg-gray-500 h-full w-full"
-            modules={[Navigation]}
-            spaceBetween={50}
-            slidesPerView={1}
-            navigation
-          >
-            <SwiperSlide>
-              <Image
-                priority
-                alt="fast-food store"
-                src={fastFoodGenericPicture}
-                layout="responsive"
-                width={400}
-                height={400}
-              />
-            </SwiperSlide>
-          </Swiper>
+          <Image
+            priority
+            alt="fast-food store"
+            src={fastFoodGenericPicture}
+            layout="intrinsic"
+            width={400}
+            height={400}
+            className="bg-gray-200 dark:bg-gray-700 dark:opacity-50"
+          />
         )}
       </div>
 

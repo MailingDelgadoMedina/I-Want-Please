@@ -649,7 +649,7 @@ export default function Example() {
 
 // import Image from "next/image";
 
-// import defaultImage from "../public/static/fastfood.jpg";
+// import defaultImage from "../public/static/pngwing.com.png";
 
 // const Card = ({ name, fsq_id, imgUrl, location }) => {
 //   if (imgUrl) {
