@@ -70,7 +70,7 @@ const RecipeDetails = (initialProps) => {
       </Link>
 
       <h1 className="text-3xl pb-4 text-sky-800 dark:text-sky-200">{title}</h1>
-      <div className="lg:p-8 w-11/12 flex flex-col lg:w-9/12 lg:max-h-[700px] overflow-hidden justify-center">
+      <div className="xl:max-w-[800px] max-w-[400px]">
         <Image
           src={image}
           alt={`Photo of ${title}`}

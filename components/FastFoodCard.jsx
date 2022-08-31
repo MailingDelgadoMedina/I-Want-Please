@@ -3,6 +3,8 @@ import Link from "next/link";
 import fastFoodGenericPicture from "../public/static/pngwing.com.png";
 
 const FastFoodCard = ({ store }) => {
+
+  //Modify location so it will show formatted_addres, country
   const storeLocation = `${
     store.location.formatted_address.length > 0
       ? store.location.formatted_address + ", "
@@ -25,7 +27,6 @@ const FastFoodCard = ({ store }) => {
             layout="responsive"
             width={500}
             height={500}
-            sizes="50vw"
             className={`object-cover rounded-md ${
               store.photos.length === 0 ? "dark:opacity-50" : ""
             }`}

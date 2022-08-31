@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import FastFoodCard from "../components/FastFoodCard";
-import { useRouter } from "next/router";
+
 
 import { useSelector, useDispatch } from "react-redux";
 import {
   setFetchedStores,
-  setSelectedStore,
   setNearby,
 } from "../redux/features/fastfood/fastfoodSlice";
 import { setLatLong } from "../redux/features/latLong/latLongSlice";
@@ -28,10 +27,9 @@ export async function getStaticProps(context) {
 
 const Testfs = (props) => {
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const stores = useSelector((state) => state.fastfood.fetchedStores);
-  const latLong = useSelector((state) => state.latLong.latLong);
+  // const latLong = useSelector((state) => state.latLong.latLong);
   const nearby = useSelector((state) => state.fastfood.nearby);
   const [loading, setLoading] = useState(false);
 

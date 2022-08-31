@@ -161,7 +161,7 @@ const FastfoodStore = (initialProps) => {
   }, [fastfoodStore]);
 
   //
-  const [isDesktop, setDesktop] = useState(window.innerWidth > 1024);
+  const [isDesktop, setDesktop] = useState(window.innerWidth > 1280);
 
   const updateMedia = () => {
     setDesktop(window.innerWidth > 1280);
@@ -186,10 +186,10 @@ const FastfoodStore = (initialProps) => {
       <h1 className="text-3xl pb-4 text-sky-800 dark:text-sky-200">
         {fastfoodStore.name}
       </h1>
-      <div className="lg:p-8 w-11/12 flex justify-center lg:w-9/12 lg:max-h-[700px] overflow-hidden">
+      <div className="max-w-[700px] flex justify-center">
         {fastfoodStore && fastfoodStore.photos?.length > 0 ? (
           <Swiper
-            className="w-full"
+            className="xl:max-w-[800px] max-w-[400px]"
             modules={[Navigation]}
             spaceBetween={10}
             slidesPerView={
